@@ -4,13 +4,14 @@
  *  Created on: 31 de out de 2018
  *      Author: sorriso
  */
-#include<stdbool.h>
 
-#include "Venda.c"
+#include <stdbool.h>
 
-typedef struct ingresso {
+#include "Sessao.c"
+
+struct ingresso {
 	int id;
-	Venda venda;
+	Sessao sessao;
 	int poltrona;
 	double valorUnitario;
 	double desconto;
@@ -18,5 +19,6 @@ typedef struct ingresso {
     bool crianca2A12;
     bool professorRedePublica;
     bool alunoRedePublica;
+};
 
-} Ingresso;
+typedef struct ingresso Ingresso;

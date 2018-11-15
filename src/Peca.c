@@ -5,34 +5,40 @@
  *      Author: sorriso
  */
 
-typedef struct peca {
+struct peca {
 	int id;
 	char *titulo;
-} Peca;
+};
 
-int isPecaNula(Peca peca) {
-	return peca == NULL;
-}
+typedef struct peca Peca;
 
-Peca *criar(int id, char *titulo) {
-	Peca peca = (Peca *) malloc(sizeof(Peca));
-	peca.id = id;
-	peca.titulo = titulo;
-
-	return (Peca *) peca;
-}
-
-int getId(Peca peca) {
-	if (!isPecaNula(peca)) {
-		return peca.id;
+int isPecaNula(Peca *peca) {
+	if (peca == NULL) {
+		return 1;
 	}
 
 	return 0;
 }
 
-char *getTitulo(Peca peca) {
-	if (isPecaNula(peca)) {
-		return (char *)peca.titulo;
+Peca *criar(int id, char *titulo) {
+	Peca *peca = malloc(sizeof(peca));
+	peca->id = id;
+	peca->titulo = titulo;
+
+	return peca;
+}
+
+int getId(Peca *peca) {
+	if (!isPecaNula(peca)) {
+		return peca->id;
+	}
+
+	return 0;
+}
+
+char *getTitulo(Peca *peca) {
+	if (!isPecaNula(peca)) {
+		return peca->titulo;
 	}
 
 	return NULL;

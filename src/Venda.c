@@ -9,12 +9,22 @@
 
 #include "Sessao.c"
 
-typedef struct venda {
+struct itemVenda {
+	Ingresso ingresso;
+	struct itemVenda *proximoItem;
+}
+
+typedef struct itemVenda ItemVenda;
+
+struct venda {
 	int id;
 	time_t dataCriacao;
 	Sessao sessao;
-	struct ingresso ingressos[];
-} Venda;
+	ItemVenda itens;
+};
+
+typedef struct venda Venda;
+
 
 int isVendaNula(Venda venda) {
 	return venda == NULL;

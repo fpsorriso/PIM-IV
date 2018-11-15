@@ -11,42 +11,48 @@
 #include "Peca.c"
 #include "Teatro.c"
 
-typedef struct sessao {
+struct sessao {
 	int id;
 	Teatro teatro;
 	Peca peca;
 	time_t dataHora;
 	double valorIngresso;
 
-} Sessao;
+};
+
+typedef struct sessao Sessao;
 
 Sessao *criar(int id, Teatro *teatro, Peca *peca, time_t dataHora,
 		double valorIngresso) {
-	Sessao sessao = (Sessao *) malloc(sizeof(Sessao));
-	sessao.id = id;
-	sessao.teatro = teatro;
-	sessao.peca = peca;
-	sessao.dataHora = dataHora;
-	sessao.valorIngresso = valorIngresso;
+	Sessao *sessao = malloc(sizeof(Sessao));
+	sessao->id = id;
+	sessao->teatro = *teatro;
+	sessao->peca = *peca;
+	sessao->dataHora = dataHora;
+	sessao->valorIngresso = valorIngresso;
 
-	return (Sessao *) sessao;
+	return sessao;
 }
 
-int isSessaoNula(Sessao sessao) {
-	return sessao == NULL;
-}
-
-int getId(Sessao sessao) {
-	if (!isSessaoNula(sessao)) {
-		return sessao.id;
+int isSessaoNula(Sessao *sessao) {
+	if (sessao == NULL) {
+		return 1;
 	}
 
 	return 0;
 }
 
-Peca getPeca(Sessao sessao) {
+int getId(Sessao *sessao) {
 	if (!isSessaoNula(sessao)) {
-		return (Peca *) sessao.peca;
+		return (int)sessao->id;
+	}
+
+	return (int) 0;
+}
+
+Peca* getPeca(Sessao *sessao) {
+	if (!isSessaoNula(sessao)) {
+		return sessao->peca;
 	}
 
 	return NULL;
@@ -54,13 +60,13 @@ Peca getPeca(Sessao sessao) {
 
 void setPeca(Sessao *sessao, Peca *peca) {
 	if (!isSessaoNula(sessao)) {
-		sessao->peca = &peca;
+		sessao->peca = *peca;
 	}
 }
 
-Teatro getTeatro(Sessao sessao) {
+Teatro* getTeatro(Sessao *sessao) {
 	if (!isSessaoNula(sessao)) {
-		return (Teatro *) sessao.teatro;
+		return (Teatro *)sessao->teatro;
 	}
 
 	return NULL;
@@ -68,24 +74,24 @@ Teatro getTeatro(Sessao sessao) {
 
 void setTeatro(Sessao *sessao, Teatro *teatro) {
 	if (!isSessaoNula(sessao)) {
-		sessao->teatro = &teatro;
+		sessao->teatro = *teatro;
 	}
 }
 
-time_t getDataHora(Sessao sessao) {
+time_t getDataHora(Sessao *sessao) {
 	if (!isSessaoNula(sessao)) {
-		return sessao.dataHora;
+		return sessao->dataHora;
 	}
 
 	return NULL;
 }
 
-char *getDataHoraStr(Sessao sessao) {
+char *getDataHoraStr(Sessao *sessao) {
 	char *result = (char *)malloc(30 * sizeof(char));
 
-	if (!isSessaoNula(sessao) && sessao.dataHora != NULL) {
-		struct tm *data = localtime(sessao.dataHora);
-		strftime(result, sizeof(result), ISO_DATE_TIME, &data);
+	if (!isSessaoNula(sessao) && sessao->dataHora != NULL) {
+		struct tm *data = localtime((time_t)sessao->dataHora);
+		strftime(result, sizeof(result), ISO_DATE_TIME, data);
 	}
 
 	return (char *)result;
@@ -101,8 +107,8 @@ void setDataHoraStr(Sessao *sessao, char *dataHora) {
 	if (!isSessaoNula(sessao)) {
 		if (strlen(&dataHora) > 0) {
 			struct tm data;
-			strptime(dataHora, ISO_DATE_TIME, &data);
-			sessao->dataHora = mktemp(&data);
+			strptime(dataHora, ISO_DATE_TIME, data);
+			sessao->dataHora = mktemp(data);
 
 		} else {
 			sessao->dataHora = (time_t *) NULL;
