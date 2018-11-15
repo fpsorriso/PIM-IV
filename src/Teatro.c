@@ -10,29 +10,33 @@ typedef struct teatro {
 	int capacidade;
 } Teatro;
 
-int isTeatroNulo(Teatro teatro) {
-	return teatro == NULL;
-}
-
-Teatro *criar(int id, int capacidade) {
-	Teatro teatro = (Teatro *) malloc(sizeof(Teatro));
-	teatro.id = id;
-	teatro.capacidade = capacidade;
-
-	return (Teatro *) teatro;
-}
-
-int getId(Teatro teatro) {
-	if (!isTeatroNulo(teatro)) {
-		return teatro.id;
+int isTeatroNulo(Teatro *teatro) {
+	if (*teatro == NULL) {
+		return 1;
 	}
 
 	return 0;
 }
 
-int getCapacidade(Teatro teatro) {
+Teatro* criar(int id, int capacidade) {
+	Teatro *teatro = malloc(sizeof *teatro);
+	teatro->id = id;
+	teatro->capacidade = capacidade;
+
+	return *teatro;
+}
+
+int getId(Teatro *teatro) {
 	if (!isTeatroNulo(teatro)) {
-		return teatro.capacidade;
+		return (int) teatro->id;
+	}
+
+	return 0;
+}
+
+int getCapacidade(Teatro *teatro) {
+	if (!isTeatroNulo(teatro)) {
+		return (int) teatro->capacidade;
 	}
 
 	return 0;
