@@ -5,6 +5,8 @@
  *      Author: sorriso
  */
 
+#include <stdlib.h>
+
 struct peca {
 	int id;
 	char *titulo;
@@ -12,7 +14,7 @@ struct peca {
 
 typedef struct peca Peca;
 
-int isPecaNula(Peca *peca) {
+int peca_isNull(Peca *peca) {
 	if (peca == NULL) {
 		return 1;
 	}
@@ -20,7 +22,7 @@ int isPecaNula(Peca *peca) {
 	return 0;
 }
 
-Peca *criar(int id, char *titulo) {
+Peca *peca_novo(int id, char *titulo) {
 	Peca *peca = malloc(sizeof(peca));
 	peca->id = id;
 	peca->titulo = titulo;
@@ -28,16 +30,16 @@ Peca *criar(int id, char *titulo) {
 	return peca;
 }
 
-int getId(Peca *peca) {
-	if (!isPecaNula(peca)) {
+int peca_getId(Peca *peca) {
+	if (!peca_isNull(peca)) {
 		return peca->id;
 	}
 
 	return 0;
 }
 
-char *getTitulo(Peca *peca) {
-	if (!isPecaNula(peca)) {
+char* peca_getTitulo(Peca *peca) {
+	if (!peca_isNull(peca)) {
 		return peca->titulo;
 	}
 
@@ -45,8 +47,12 @@ char *getTitulo(Peca *peca) {
 
 }
 
-void setTitulo(Peca *peca, char titulo[]) {
-	if (!isPecaNula(peca)) {
+void peca_setTitulo(Peca *peca, char titulo[]) {
+	if (!peca_isNull(peca)) {
 		peca->titulo = titulo;
 	}
+}
+
+void peca_print(Peca* peca) {
+	printf("[Peca] %d - %s", peca_getId(peca), peca_getTitulo(peca));
 }
