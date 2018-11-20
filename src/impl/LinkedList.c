@@ -1,25 +1,14 @@
 /*
- * LinkedList.h
+ * LinkedList.c
  *
- *  Created on: 18 de nov de 2018
+ *  Created on: 19 de nov de 2018
  *      Author: sorriso
  */
 
-#ifndef SRC_LINKEDLIST_H_
-#define SRC_LINKEDLIST_H_
+#include "../def/LinkedList.h"
+#include "../def/Exceptions.h"
 
 #include <stdlib.h>
-#include <Exceptions.h>
-
-struct node {
-	void* value;
-	struct node* next;
-};
-
-typedef struct node Node;
-typedef struct node LinkedList;
-
-typedef int (*comparable)(void* value, anotherValue);
 
 Node* linkedList_put(void* value, Node* next) {
 	Node* new_node = (Node*) malloc(sizeof(Node));
@@ -53,7 +42,7 @@ Node* linkedList_search(Node* head, void* value, comparable compareFunction) {
 			return head;
 		}
 
-		return search(head->next, value, compareFunction);
+		return linkedList_search(head->next, value, compareFunction);
 	}
 
 	return NULL;
@@ -94,15 +83,15 @@ Node* linkedList_removeBack(Node* head) {
 	return head;
 }
 
-Node* linkedList_remove(Node* head, Node* nd) {
+Node* linkedList_remove(LinkedList* head, Node* node) {
 	/* if the node is the first node */
-	if (nd == head) {
+	if (node == head) {
 		head = linkedList_removeFront(head);
 		return head;
 	}
 
 	/* if the node is the last node */
-	if (nd->next == NULL) {
+	if (node->next == NULL) {
 		head = linkedList_removeBack(head);
 		return head;
 	}
@@ -110,7 +99,7 @@ Node* linkedList_remove(Node* head, Node* nd) {
 	/* if the node is in the middle */
 	Node* cursor = head;
 	while (cursor != NULL) {
-		if (cursor->next = nd) {
+		if (cursor->next == node) {
 			break;
 		}
 
@@ -127,7 +116,7 @@ Node* linkedList_remove(Node* head, Node* nd) {
 	return head;
 }
 
-void linkedList_dispose(Node *head) {
+void linkedList_dispose(LinkedList *head) {
 	Node *cursor, *tmp;
 
 	if (head != NULL) {
@@ -142,4 +131,9 @@ void linkedList_dispose(Node *head) {
 	}
 }
 
-#endif /* SRC_LINKEDLIST_H_ */
+void linkedList_foreach(LinkedList* head, callback function) {
+	if (head != NULL) {
+		function(head->value);
+		linkedList_foreach(head->next, function);
+	}
+}

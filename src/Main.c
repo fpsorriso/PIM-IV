@@ -7,14 +7,27 @@
 
 #include <stdio.h>
 
+#include "./def/LinkedList.h"
+#include "./def/Peca.h"
+#include "./def/Sessao.h"
+#include "./def/Teatro.h"
 
 int main() {
-//	LinkedList* listaSessao = NULL;
-//	Teatro* teatro = NULL;
-//	Peca* peca = NULL;
+	LinkedList* listaSessao = NULL;
+	LinkedList* listaVenda = NULL;
+	Teatro* teatro = NULL;
+	Peca* peca = NULL;
 
-	printf("N\u00E3o sei se \u00E9 assim que da certo.");
+	teatro_cadastra(teatro);
+	peca_cadastro(peca);
+	sessao_cadastra(listaSessao, teatro, peca);
+	venda_cadastra(listaVenda, listaSessao);
+
+	linkedList_dispose(listaSessao);
+	linkedList_dispose(listaVenda);
+	free(teatro);
+	free(peca);
+	printf("Sistema encerrado.");
 	return(0);
-
 }
 

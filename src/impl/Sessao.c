@@ -5,28 +5,10 @@
  *      Author: sorriso
  */
 
+#include "../def/Sessao.h"
+#include "../def/Constantes.h"
 #include <time.h>
-#include "DateTimeFormatter.h"
-#include "Peca.h"
-#include "Teatro.h"
-
-struct sessao {
-	int id;
-	Teatro teatro;
-	Peca peca;
-	time_t dataHora;
-	double valorIngresso;
-
-};
-
-typedef struct sessao Sessao;
-
-struct listaSessao {
-	Sessao* sessao;
-	struct listaSessao* proximo;
-};
-
-typedef struct listaSessao ListaSessao;
+#include <stdlib.h>
 
 int sessao_isNull(Sessao* sessao) {
 	if (sessao == NULL) {
@@ -126,13 +108,13 @@ void sessao_setValorIngresso(Sessao* sessao, double valorIngresso) {
 	}
 }
 
-int sessao_equals(Sessao* sessao, Sessao* outraSessao) {
-	if (!sessao_isNull(sessao) && !sessao_isNull(outraSessao)) {
-		return sessao->id == outraSessao->id;
-	}
-
-	return sessao_isNull(sessao) && sessao_isNull(outraSessao);
-}
+//int sessao_equals(Sessao* sessao, Sessao* outraSessao) {
+//	if (!sessao_isNull(sessao) && !sessao_isNull(outraSessao)) {
+//		return sessao->id == outraSessao->id;
+//	}
+//
+//	return sessao_isNull(sessao) && sessao_isNull(outraSessao);
+//}
 
 int sessao_isTercaFeira(Sessao* sessao) {
 	if (!sessao_isNull(sessao) && sessao->dataHora != NULL) {
@@ -153,7 +135,7 @@ Sessao* sessao_nova(int id, Teatro* teatro, Peca* peca, char* dataHora, double v
 	Sessao* sessao = (Sessao*) calloc(1, sizeof(Sessao));
 
 	if (sessao == NULL) {
-		throwStackOverFlowWithParam();
+		throwStackOverFlowException();
 	}
 
 	sessao->id = id;
@@ -170,32 +152,28 @@ void sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
 	int novoIdSessao = linkedList_count(list) + 1;
 
 	if (teatro_isNull(teatro)) {
-		throwExceptionAlternativeMessage("O teatro não foi cadastrado para a sess\u00E3o.");
+		throwException("\nO teatro não foi cadastrado para a sess\u00E3o.");
 	}
 
 	if (peca_isNull(peca)) {
-		throwExceptionAlternativeMessage("A pe\00F7a n\u00E3o foi cadastrada para a sess\u00E3o.");
+		throwException("\nA pe\00F7a n\u00E3o foi cadastrada para a sess\u00E3o.");
 	}
 
-	printf("Informe a data e hora da sess\u00E3o (dd/mm/yyyy HH:MM):");
+	printf("Informe a data e hora da sess\u00E3o (dd/mm/yyyy HH:MM):\n");
 	gets(dataHora);
 
-	printf("Informe o valor do ingresso para a sess\u00E3o:");
+	printf("Informe o valor do ingresso para a sess\u00E3o:\n");
 	scanf("%.2f", &valorIngresso);
 
 	linkedList_put(sessao_nova(novoIdSessao, teatro, peca, dataHora, valorIngresso), list);
 }
 
 static comparable* sessao_comparableId(Sessao* sessao, int id) {
-	if (!sessao_isNull(sessao)) {
-		return sessao->id == id;
-	}
-
-	return 0;
+	return sessao_getId(sessao) == id;
 }
 
 Sessao* sessao_busca(LinkedList* list, int id) {
-	Node* node = linkedList_search(list, id, sessao_comparableId());
+	Node* node = linkedList_search(list, id, sessao_comparableId);
 
 	if (node != NULL) {
 		return (Sessao*) node->value;
@@ -204,14 +182,18 @@ Sessao* sessao_busca(LinkedList* list, int id) {
 	return NULL;
 }
 
-void sessao_print(int comTeatro, int comPeca, Sessao sessao) {
+void sessao_print(int comTeatro, int comPeca, Sessao* sessao) {
 	if (comTeatro) {
-		teatro_print(sessao.teatro);
+		teatro_print(&sessao->teatro);
 	}
 
 	if (comPeca) {
-		peca_print(sessao.peca);
+		peca_print(&sessao->peca);
 	}
 
-	printf("\t[Sessao] %d - %s - R$ %.2f", sessao_getId(sessao), sessao_getDataHoraStr(sessao), sessao_getValorIngresso(sessao));
+	printf("\n\t[Sessao] %d - %s - R$ %.2f", sessao_getId(sessao), sessao_getDataHoraStr(sessao), sessao_getValorIngresso(sessao));
+}
+
+void sessao_simplePrint(Sessao* sessao) {
+	printf("\n\t[Sessao] %d - %s", sessao_getId(sessao), sessao_getDataHoraStr(sessao));
 }
