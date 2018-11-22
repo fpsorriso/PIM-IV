@@ -18,10 +18,10 @@ int main() {
 	Teatro* teatro = NULL;
 	Peca* peca = NULL;
 
-	teatro_cadastra(teatro);
-	peca_cadastro(peca);
-	sessao_cadastra(listaSessao, teatro, peca);
-	venda_cadastra(listaVenda, listaSessao);
+	teatro = teatro_cadastra(teatro);
+	peca = peca_cadastro(peca);
+	listaSessao = sessao_cadastra(listaSessao, teatro, peca);
+	listaVenda = venda_cadastra(listaVenda, listaSessao);
 
 	linkedList_dispose(listaSessao);
 	linkedList_dispose(listaVenda);

@@ -25,6 +25,6 @@ char* peca_getTitulo(Peca *peca);
 
 void peca_print(Peca* peca);
 
-void peca_cadastro(Peca* peca);
+Peca* peca_cadastro(Peca* peca);
 
 #endif /* _PECA_H_ */

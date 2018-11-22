@@ -7,6 +7,11 @@
 
 
 #include "../def/Ingresso.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "../def/Constante.h"
 #include "../def/LinkedList.h"
 #include "../def/Sessao.h"
 
@@ -90,7 +95,8 @@ Ingresso* ingresso_novo(int id, Venda* venda, int poltrona, int idoso, int crian
 		Ingresso *ingresso = (Ingresso *) calloc(1, sizeof(Ingresso));
 
 		if (ingresso == NULL) {
-			throwStackOverFlowException();
+			printf(_EXCEPTION_MEMORIA_INSUFICIENTE);
+			return NULL;
 		}
 
 		ingresso->id = id;

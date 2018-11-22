@@ -29,6 +29,6 @@ int teatro_equals(Teatro *teatro, Teatro *outroTeatro);
 
 void teatro_print(Teatro* teatro);
 
-void teatro_cadastra(Teatro* teatro);
+Teatro* teatro_cadastra(Teatro* teatro);
 
 #endif /* _TEATRO_H_ */

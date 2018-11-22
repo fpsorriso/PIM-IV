@@ -28,6 +28,6 @@ int venda_getId(Venda *venda);
 
 Sessao* venda_getSessao(Venda *venda);
 
-void venda_cadastra(LinkedList* list, LinkedList* listSessao);
+LinkedList* venda_cadastra(LinkedList* list, LinkedList* listSessao);
 
 #endif /* SRC_VENDA_H_ */

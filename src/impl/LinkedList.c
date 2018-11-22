@@ -6,15 +6,15 @@
  */
 
 #include "../def/LinkedList.h"
-#include "../def/Exceptions.h"
-
 #include <stdlib.h>
+#include "../def/Constante.h"
 
 Node* linkedList_put(void* value, Node* next) {
 	Node* new_node = (Node*) malloc(sizeof(Node));
 
 	if (new_node == NULL) {
-		exit(throwStackOverFlowException());
+		error(0,_ERROR_CODE_MEMORIA_INSUFICIENTE, _EXCEPTION_MEMORIA_INSUFICIENTE);
+		return NULL;
 	}
 
 	new_node->value = value;

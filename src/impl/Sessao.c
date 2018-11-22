@@ -6,9 +6,13 @@
  */
 
 #include "../def/Sessao.h"
-#include "../def/Constantes.h"
-#include <time.h>
+
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include "../def/Constante.h"
+#include "../def/Util.h"
 
 int sessao_isNull(Sessao* sessao) {
 	if (sessao == NULL) {
@@ -108,14 +112,6 @@ void sessao_setValorIngresso(Sessao* sessao, double valorIngresso) {
 	}
 }
 
-//int sessao_equals(Sessao* sessao, Sessao* outraSessao) {
-//	if (!sessao_isNull(sessao) && !sessao_isNull(outraSessao)) {
-//		return sessao->id == outraSessao->id;
-//	}
-//
-//	return sessao_isNull(sessao) && sessao_isNull(outraSessao);
-//}
-
 int sessao_isTercaFeira(Sessao* sessao) {
 	if (!sessao_isNull(sessao) && sessao->dataHora != NULL) {
 		struct tm *data = localtime((time_t) sessao->dataHora);
@@ -135,7 +131,8 @@ Sessao* sessao_nova(int id, Teatro* teatro, Peca* peca, char* dataHora, double v
 	Sessao* sessao = (Sessao*) calloc(1, sizeof(Sessao));
 
 	if (sessao == NULL) {
-		throwStackOverFlowException();
+		error(0, _ERROR_CODE_MEMORIA_INSUFICIENTE, _EXCEPTION_MEMORIA_INSUFICIENTE);
+		return NULL;
 	}
 
 	sessao->id = id;
@@ -144,28 +141,6 @@ Sessao* sessao_nova(int id, Teatro* teatro, Peca* peca, char* dataHora, double v
 	sessao->valorIngresso = valorIngresso;
 
 	return sessao;
-}
-
-void sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
-	char* dataHora = NULL;
-	double valorIngresso = 0;
-	int novoIdSessao = linkedList_count(list) + 1;
-
-	if (teatro_isNull(teatro)) {
-		throwException("\nO teatro não foi cadastrado para a sess\u00E3o.");
-	}
-
-	if (peca_isNull(peca)) {
-		throwException("\nA pe\00F7a n\u00E3o foi cadastrada para a sess\u00E3o.");
-	}
-
-	printf("Informe a data e hora da sess\u00E3o (dd/mm/yyyy HH:MM):\n");
-	gets(dataHora);
-
-	printf("Informe o valor do ingresso para a sess\u00E3o:\n");
-	scanf("%.2f", &valorIngresso);
-
-	linkedList_put(sessao_nova(novoIdSessao, teatro, peca, dataHora, valorIngresso), list);
 }
 
 static comparable* sessao_comparableId(Sessao* sessao, int id) {
@@ -191,9 +166,70 @@ void sessao_print(int comTeatro, int comPeca, Sessao* sessao) {
 		peca_print(&sessao->peca);
 	}
 
-	printf("\n\t[Sessao] %d - %s - R$ %.2f", sessao_getId(sessao), sessao_getDataHoraStr(sessao), sessao_getValorIngresso(sessao));
+	printf("\n\t[Sess\u00E3o] %d - %s - R$ %.2f", sessao_getId(sessao), sessao_getDataHoraStr(sessao), sessao_getValorIngresso(sessao));
 }
 
 void sessao_simplePrint(Sessao* sessao) {
 	printf("\n\t[Sessao] %d - %s", sessao_getId(sessao), sessao_getDataHoraStr(sessao));
+}
+
+LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
+	char dataHora[strlen(_ISO_DATE_TIME_VIEW)];
+	double valorIngresso = 0;
+	int novoIdSessao = linkedList_count(list) + 1;
+	char opcao;
+
+	if (teatro_isNull(teatro)) {
+		fprintf(stderr, _EXCEPTION_NULL_POINT, "O teatro");
+		return list;
+	}
+
+	if (peca_isNull(peca)) {
+		fprintf(stderr, _EXCEPTION_NULL_POINT, "A pe\00F7a");
+		return list;
+	}
+
+	do {
+		dataHora[0] = '\0';
+		opcao = '\0';
+
+		__fpurge(stdin);
+		printf("Informe a data e hora da sess\u00E3o (%s):\n", _ISO_DATE_TIME_VIEW);
+		fgets(dataHora, strlen(_ISO_DATE_TIME_VIEW), stdin);
+
+		if (strIsEmpty(dataHora) || strlen(strTrim(dataHora)) != strlen(_ISO_DATE_TIME_VIEW)) {
+			fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "Data e Hora");
+			fprintf(stderr, " ");
+			fprintf(stderr, _MENSAGEM_INFORMAR_NOVAMENTE);
+			scanf("%s", &opcao);
+		}
+
+	} while ((strIsEmpty(dataHora) || strlen(strTrim(dataHora)) != strlen(_ISO_DATE_TIME_VIEW)) && opcao == 's');
+
+	if (strIsEmpty(dataHora)) {
+		fprintf(stderr, _EXCEPTION_IMPOSSIVEL_CADASTRAR, "da Sess\u00E3o");
+		return list;
+	}
+
+	do {
+		opcao = '\0';
+		valorIngresso = 0.00;
+		printf("Informe o valor do ingresso para a sess\u00E3o:\n");
+		scanf("%.2f", &valorIngresso);
+
+		if (valorIngresso == 0) {
+			fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "Valor do Ingresso");
+			fprintf(stderr, " ");
+			fprintf(stderr, _MENSAGEM_INFORMAR_NOVAMENTE);
+			scanf("%s", &opcao);
+		}
+
+	} while (valorIngresso == 0.00 && opcao == 's');
+
+	if (valorIngresso == 0) {
+		fprintf(stderr, _EXCEPTION_IMPOSSIVEL_CADASTRAR, "da Sess\u00E3o");
+		return list;
+	}
+
+	return linkedList_put(sessao_nova(novoIdSessao, teatro, peca, dataHora, valorIngresso), list);
 }

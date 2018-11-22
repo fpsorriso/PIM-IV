@@ -9,9 +9,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include "../lib/cexcept.h"
-#include "../def/Constantes.h"
+
+#include "../def/Util.h"
+#include "../def/Constante.h"
 
 #define _SIZE_TITULO 50
 
@@ -25,6 +25,12 @@ int peca_isNull(Peca *peca) {
 
 Peca* peca_novo(int id, char *titulo) {
 	Peca *peca = malloc(sizeof(peca));
+
+	if (peca == NULL) {
+		error(0, _ERROR_CODE_MEMORIA_INSUFICIENTE, _EXCEPTION_MEMORIA_INSUFICIENTE);
+		return NULL;
+	}
+
 	peca->id = id;
 	peca->titulo = titulo;
 
@@ -48,7 +54,7 @@ char* peca_getTitulo(Peca *peca) {
 
 }
 
-void peca_setTitulo(Peca *peca, char titulo[]) {
+void peca_setTitulo(Peca *peca, char* titulo) {
 	if (!peca_isNull(peca)) {
 		peca->titulo = titulo;
 	}
@@ -58,7 +64,7 @@ void peca_print(Peca* peca) {
 	printf("\n[Peca] %d - %s", peca_getId(peca), peca_getTitulo(peca));
 }
 
-void peca_cadastro(Peca* peca) {
+Peca* peca_cadastro(Peca* peca) {
 	if (peca_isNull(peca)) {
 
 		int novoIdPeca = 1;
@@ -66,33 +72,32 @@ void peca_cadastro(Peca* peca) {
 		char opcao;
 
 		do {
-			strcmp(titulo, "\0");
+			titulo[0] = '\0';
 			opcao = '\0';
-
 
 			__fpurge(stdin);
 			printf("\nInforme o titulo da Pe\u00E7a:");
-			Try {
-			scanf ( strcat(strcat("%", _SIZE_TITULO), "[^\n]"), titulo);
-			} Catch(e) {
-				Throw e;
-			}
+			fgets(titulo, _SIZE_TITULO, stdin);
 
-			if (strlen(titulo) == 0) {
-				printf(strcat(strcat("\n", _CAMPO_OBRIGATORIO), ".%s"), "Titulo", _MENSAGEM_INFORMAR_NOVAMENTE);
+
+			if (strIsEmpty(titulo)) {
+				fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "Titulo");
+				fprintf(stderr, " ");
+				fprintf(stderr, _MENSAGEM_INFORMAR_NOVAMENTE);
 				scanf("%s", &opcao);
 			}
 
-		} while(strlen(titulo) == 0 && opcao == 's');
+		} while(strIsEmpty(titulo) && opcao == 's');
 
 		if (strlen(titulo) == 0) {
-			Throw("\nN\u00E3o poss\u00EDvel realizar o cadastro do Pe\u00E7a.");
-			return;
+			fprintf(stderr, _ERROR_CODE_IMPOSSIVEL_CADASTRAR, "da Pe\u00E7a");
+			return NULL;
 		}
 
-		peca = peca_novo(novoIdPeca, titulo);
+		return peca_novo(novoIdPeca, titulo);
 	} else {
-		Throw("\nPe\u00E7a j\u00E1 cadastrada.");
+		fprintf(stderr, _EXCEPTION_CADASTRO_JA_EXISTENTE, "Pe\u00E7a");
 		peca_print(peca);
+		return peca;
 	}
 }

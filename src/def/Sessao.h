@@ -48,12 +48,12 @@ int sessao_isTercaFeira(Sessao* sessao);
 
 Sessao* sessao_nova(int id, Teatro* teatro, Peca* peca, char* dataHora, double valorIngresso);
 
-void sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca);
-
 Sessao* sessao_busca(LinkedList* list, int id);
 
 void sessao_print(int comTeatro, int comPeca, Sessao* sessao);
 
 void sessao_simplePrint(Sessao* sessao);
+
+LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca);
 
 #endif /* _SESSAO_H_ */
