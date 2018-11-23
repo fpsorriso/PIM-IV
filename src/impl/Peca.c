@@ -13,8 +13,6 @@
 #include "../def/Util.h"
 #include "../def/Constante.h"
 
-#define _SIZE_TITULO 50
-
 int peca_isNull(Peca *peca) {
 	if (peca == NULL) {
 		return 1;
@@ -24,7 +22,7 @@ int peca_isNull(Peca *peca) {
 }
 
 Peca* peca_novo(int id, char *titulo) {
-	Peca *peca = malloc(sizeof(peca));
+	Peca *peca = (Peca*) calloc(1, sizeof(peca));
 
 	if (peca == NULL) {
 		error(0, _ERROR_CODE_MEMORIA_INSUFICIENTE, _EXCEPTION_MEMORIA_INSUFICIENTE);
@@ -32,7 +30,8 @@ Peca* peca_novo(int id, char *titulo) {
 	}
 
 	peca->id = id;
-	peca->titulo = titulo;
+	peca->titulo = (char*) calloc(sizeof(titulo), sizeof(char));
+	peca_setTitulo(peca, titulo);
 
 	return peca;
 }
@@ -56,7 +55,7 @@ char* peca_getTitulo(Peca *peca) {
 
 void peca_setTitulo(Peca *peca, char* titulo) {
 	if (!peca_isNull(peca)) {
-		peca->titulo = titulo;
+		strCopy(titulo, peca->titulo);
 	}
 }
 

@@ -24,6 +24,16 @@ int char_IsCaracterControle(char caracter) {
 	}
 }
 
+void strCopy(char* source, char* destine) {
+	while (*source != '\0') {
+		*destine = *source;
+		++destine;
+		++source;
+	}
+
+	*destine = '\0';
+}
+
 char* strSubstr(char* str, int indexInicial, int quantidadeCaracteres) {
 	int sizeStrOriginal = strlen(str);
 	int quantidadeCaracteresCopiar = quantidadeCaracteres > sizeStrOriginal ? sizeStrOriginal : quantidadeCaracteres;

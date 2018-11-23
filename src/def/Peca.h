@@ -8,9 +8,11 @@
 #ifndef _PECA_H_
 #define _PECA_H_
 
+#define _SIZE_TITULO 50
+
 struct peca {
 	int id;
-	char *titulo;
+	char* titulo;
 };
 
 typedef struct peca Peca;

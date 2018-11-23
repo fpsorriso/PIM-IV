@@ -195,7 +195,7 @@ LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
 
 		__fpurge(stdin);
 		printf("Informe a data e hora da sess\u00E3o (%s):\n", _ISO_DATE_TIME_VIEW);
-		fgets(dataHora, strlen(_ISO_DATE_TIME_VIEW), stdin);
+		fgets(dataHora, strlen(_ISO_DATE_TIME_VIEW) + 1, stdin);
 
 		if (strIsEmpty(dataHora) || strlen(strTrim(dataHora)) != strlen(_ISO_DATE_TIME_VIEW)) {
 			fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "Data e Hora");
@@ -214,8 +214,9 @@ LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
 	do {
 		opcao = '\0';
 		valorIngresso = 0.00;
+		__fpurge(stdin);
 		printf("Informe o valor do ingresso para a sess\u00E3o:\n");
-		scanf("%.2f", &valorIngresso);
+		scanf("%f", &valorIngresso);
 
 		if (valorIngresso == 0) {
 			fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "Valor do Ingresso");
@@ -224,7 +225,7 @@ LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
 			scanf("%s", &opcao);
 		}
 
-	} while (valorIngresso == 0.00 && opcao == 's');
+	} while (valorIngresso == 0 && opcao == 's');
 
 	if (valorIngresso == 0) {
 		fprintf(stderr, _EXCEPTION_IMPOSSIVEL_CADASTRAR, "da Sess\u00E3o");

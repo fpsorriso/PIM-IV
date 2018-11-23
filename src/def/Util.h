@@ -8,6 +8,8 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
+void strCopy(char* source, char* destine);
+
 char* strSubstr(char* str, int indexInicial, int quantidadeCaracteres);
 
 char* strTrim(char* str);

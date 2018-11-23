@@ -6,10 +6,14 @@
  */
 
 #include "../def/Venda.h"
-#include "../def/Ingresso.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <time.h>
+
 #include "../def/Constante.h"
+#include "../def/Ingresso.h"
 
 int venda_isNull(Venda *venda) {
 	if (venda == NULL) {
@@ -107,7 +111,7 @@ LinkedList* venda_cadastra(LinkedList* listVenda, LinkedList* listSessao) {
 	char opcao = '\0';
 
 	if (listSessao == NULL) {
-		error(0, _ERROR_CODE_NULL_POINT, _EXCEPTION_NULL_POINT, "A sess\u00E3o");
+		fprintf(stderr, _EXCEPTION_NULL_POINT, "A sess\u00E3o");
 		return listVenda;
 	}
 
