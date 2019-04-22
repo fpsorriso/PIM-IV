@@ -8,8 +8,9 @@
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/PIM-IV" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
 				<Option object_output="obj/Debug/" />
-				<Option type="1" />
+				<Option type="5" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
@@ -31,8 +32,36 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="src/DateTimeFormatter.h" />
 		<Unit filename="src/Main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/def/Constante.h" />
+		<Unit filename="src/def/LinkedList.h" />
+		<Unit filename="src/def/Menu.h" />
+		<Unit filename="src/def/Peca.h" />
+		<Unit filename="src/def/Sessao.h" />
+		<Unit filename="src/def/Teatro.h" />
+		<Unit filename="src/def/Util.h" />
+		<Unit filename="src/def/Venda.h" />
+		<Unit filename="src/impl/LinkedList.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/impl/Menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/impl/Peca.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/impl/Sessao.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/impl/Teatro.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/impl/Util.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/impl/Venda.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

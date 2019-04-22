@@ -22,6 +22,14 @@ int sessao_isNull(Sessao* sessao) {
 	return 0;
 }
 
+int sessao_dataIsNull(Sessao* sessao) {
+	if (sessao->dataHora == (time_t) -1) {
+		return 1;
+	}
+
+	return 0;
+}
+
 int sessao_getId(Sessao* sessao) {
 	if (!sessao_isNull(sessao)) {
 		return (int) sessao->id;
@@ -44,20 +52,6 @@ void sessao_setPeca(Sessao* sessao, Peca* peca) {
 	}
 }
 
-Teatro* sessao_getTeatro(Sessao* sessao) {
-	if (!sessao_isNull(sessao)) {
-		return &sessao->teatro;
-	}
-
-	return NULL;
-}
-
-void sessao_setTeatro(Sessao* sessao, Teatro* teatro) {
-	if (!sessao_isNull(sessao)) {
-		sessao->teatro = *teatro;
-	}
-}
-
 time_t sessao_getDataHora(Sessao* sessao) {
 	if (!sessao_isNull(sessao)) {
 		return sessao->dataHora;
@@ -67,10 +61,10 @@ time_t sessao_getDataHora(Sessao* sessao) {
 }
 
 char* sessao_getDataHoraStr(Sessao* sessao) {
-	char *result = (char *) malloc(30 * sizeof(char));
+	char *result = calloc(1, sizeof(char));
 
-	if (!sessao_isNull(sessao) && sessao->dataHora != NULL) {
-		struct tm *data = localtime((time_t *) sessao->dataHora);
+	if (!sessao_isNull(sessao) && !sessao_dataIsNull(sessao)) {
+		struct tm* data = localtime(&sessao->dataHora);
 		strftime(result, sizeof(result), _ISO_DATE_TIME, data);
 		free(data);
 	}
@@ -78,43 +72,27 @@ char* sessao_getDataHoraStr(Sessao* sessao) {
 	return (char *) result;
 }
 
-void sessao_setDataHora(Sessao* sessao, time_t* dataHora) {
+void sessao_setDataHora(Sessao* sessao, time_t dataHora) {
 	if (!sessao_isNull(sessao)) {
-		sessao->dataHora = &dataHora;
+		sessao->dataHora = dataHora;
 	}
 }
 
 void sessao_setDataHoraStr(Sessao* sessao, char* dataHora) {
 	if (!sessao_isNull(sessao)) {
 		if (strlen(dataHora) > 0) {
-			struct tm *data;
-			strptime(dataHora, _ISO_DATE_TIME, data);
-			sessao->dataHora = mktemp(data);
-			free(data);
-
+			struct tm data;
+			strptime(dataHora, _ISO_DATE_TIME, &data);
+			sessao->dataHora = mktime(&data);
 		} else {
-			sessao->dataHora = (time_t *) NULL;
+			sessao->dataHora = (time_t) -1;
 		}
 	}
 }
 
-double sessao_getValorIngresso(Sessao* sessao) {
-	if (!sessao_isNull(sessao)) {
-		return sessao->valorIngresso;
-	}
-
-	return 0.00;
-}
-
-void sessao_setValorIngresso(Sessao* sessao, double valorIngresso) {
-	if (!sessao_isNull(sessao)) {
-		sessao->valorIngresso = valorIngresso;
-	}
-}
-
 int sessao_isTercaFeira(Sessao* sessao) {
-	if (!sessao_isNull(sessao) && sessao->dataHora != NULL) {
-		struct tm *data = localtime((time_t) sessao->dataHora);
+	if (!sessao_isNull(sessao) && sessao->dataHora ) {
+		struct tm *data = localtime(&sessao->dataHora);
 
 		if (data->tm_wday == 2) {
 			free(data);
@@ -147,7 +125,7 @@ static comparable* sessao_comparableId(Sessao* sessao, int id) {
 	return sessao_getId(sessao) == id;
 }
 
-Sessao* sessao_busca(LinkedList* list, int id) {
+Sessao* sessao_busca(LinkedList* list, int* id) {
 	Node* node = linkedList_search(list, id, sessao_comparableId);
 
 	if (node != NULL) {
@@ -193,7 +171,6 @@ LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
 		dataHora[0] = '\0';
 		opcao = '\0';
 
-		__fpurge(stdin);
 		printf("Informe a data e hora da sess\u00E3o (%s):\n", _ISO_DATE_TIME_VIEW);
 		fgets(dataHora, strlen(_ISO_DATE_TIME_VIEW) + 1, stdin);
 
@@ -201,7 +178,7 @@ LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
 			fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "Data e Hora");
 			fprintf(stderr, " ");
 			fprintf(stderr, _MENSAGEM_INFORMAR_NOVAMENTE);
-			scanf("%s", &opcao);
+			scanf(" %c", &opcao);
 		}
 
 	} while ((strIsEmpty(dataHora) || strlen(strTrim(dataHora)) != strlen(_ISO_DATE_TIME_VIEW)) && opcao == 's');
@@ -214,15 +191,14 @@ LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
 	do {
 		opcao = '\0';
 		valorIngresso = 0.00;
-		__fpurge(stdin);
 		printf("Informe o valor do ingresso para a sess\u00E3o:\n");
-		scanf("%f", &valorIngresso);
+		scanf(" %2lf", &valorIngresso);
 
 		if (valorIngresso == 0) {
 			fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "Valor do Ingresso");
 			fprintf(stderr, " ");
 			fprintf(stderr, _MENSAGEM_INFORMAR_NOVAMENTE);
-			scanf("%s", &opcao);
+			scanf(" %c", &opcao);
 		}
 
 	} while (valorIngresso == 0 && opcao == 's');

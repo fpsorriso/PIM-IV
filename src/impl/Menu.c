@@ -137,25 +137,13 @@ void executaOpcao(int tamanhoMenu, int opcao) {
 	}
 }
 
-void cls(void) {
-#ifdef linux || LINUX || Linux || UNIX
-	//código especifico para linux
-	//system ("clear");//poderia ser este mas escolhi este outro pois é mais a cara do C
-	printf("\e[H\e[2J\n");
-#elif defined WIN32
-	//código específico para windows
-	system ("cls");
-#else
-	printf("\e[H\e[2J");
-#endif
-
-}
 void exibeMenuPrincipal() {
 	int opcaoMenu = 0;
 
 	do {
 		opcaoMenu = 0;
-		cls();
+		system("clean");
+		system("clear");
 		imprimeMenu(_TAMANHO_MENU);
 		scanf("%d", &opcaoMenu);
 		executaOpcao(_TAMANHO_MENU, opcaoMenu);

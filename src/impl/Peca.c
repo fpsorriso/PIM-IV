@@ -21,7 +21,7 @@ int peca_isNull(Peca *peca) {
 	return 0;
 }
 
-Peca* peca_novo(int id, char *titulo) {
+Peca* peca_novo(Teatro* pTeatro, char* pTitulo, double pValorIngresso) {
 	Peca *peca = (Peca*) calloc(1, sizeof(peca));
 
 	if (peca == NULL) {
@@ -29,19 +29,19 @@ Peca* peca_novo(int id, char *titulo) {
 		return NULL;
 	}
 
-	peca->id = id;
-	peca->titulo = (char*) calloc(sizeof(titulo), sizeof(char));
-	peca_setTitulo(peca, titulo);
+	peca->teatro = pTeatro;
+	peca->titulo = pTitulo;
+	peca->valorIngresso = pValorIngresso;
 
 	return peca;
 }
 
-int peca_getId(Peca *peca) {
+int peca_getTeatro(Peca peca) {
 	if (!peca_isNull(peca)) {
-		return peca->id;
+		return peca->teatro;
 	}
 
-	return 0;
+	return nullptr;
 }
 
 char* peca_getTitulo(Peca *peca) {
@@ -53,9 +53,23 @@ char* peca_getTitulo(Peca *peca) {
 
 }
 
-void peca_setTitulo(Peca *peca, char* titulo) {
+void peca_setTitulo(Peca* peca, char* titulo) {
 	if (!peca_isNull(peca)) {
 		strCopy(titulo, peca->titulo);
+	}
+}
+
+double sessao_getValorIngresso(Sessao* sessao) {
+	if (!sessao_isNull(sessao)) {
+		return sessao->valorIngresso;
+	}
+
+	return 0.00;
+}
+
+void sessao_setValorIngresso(Sessao* sessao, double valorIngresso) {
+	if (!sessao_isNull(sessao)) {
+		sessao->valorIngresso = valorIngresso;
 	}
 }
 

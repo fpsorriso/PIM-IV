@@ -114,7 +114,3 @@ Ingresso* ingresso_novo(int id, Venda* venda, int poltrona, int idoso, int crian
 	return NULL;
 }
 
-
-static comparable* ingresso_comparableId(Ingresso* ingresso, int id) {
-	return ingresso_getId(ingresso) == id;
-}

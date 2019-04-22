@@ -11,8 +11,9 @@
 #define _SIZE_TITULO 50
 
 struct peca {
-	int id;
+	Teatro teatro;
 	char* titulo;
+	double valorIngresso;
 };
 
 typedef struct peca Peca;
@@ -21,11 +22,15 @@ int peca_isNull(Peca *peca);
 
 Peca* peca_novo(int id, char *titulo);
 
-int peca_getId(Peca *peca);
+Teatro peca_getTeatro(Peca peca);
 
-char* peca_getTitulo(Peca *peca);
+char* peca_getTitulo(Peca peca);
 
-void peca_print(Peca* peca);
+double peca_getValorIngresso(Peca peca);
+
+void peca_setValorIngresso(Peca* peca, double valorIngresso);
+
+void peca_print(Peca peca);
 
 Peca* peca_cadastro(Peca* peca);
 

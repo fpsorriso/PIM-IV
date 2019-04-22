@@ -13,7 +13,6 @@
 #include <time.h>
 
 #include "../def/Constante.h"
-#include "../def/Ingresso.h"
 
 int venda_isNull(Venda *venda) {
 	if (venda == NULL) {
@@ -45,9 +44,6 @@ void venda_setSessao(Venda *venda, Sessao *sessao) {
 	}
 }
 
-static comparable* venda_comparableId(Venda* venda, int id) {
-	return venda_getId(venda) == id;
-}
 
 Venda* venda_novo(int id, Sessao *sessao) {
 	Venda *venda = (Venda *) calloc(1, sizeof(Venda));

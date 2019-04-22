@@ -7,6 +7,7 @@
 
 #include "../def/LinkedList.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include "../def/Constante.h"
 
 Node* linkedList_put(void* value, Node* next) {

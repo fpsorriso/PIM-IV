@@ -9,7 +9,6 @@
 #define _TEATRO_H_
 
 struct teatro {
-	int id;
 	int capacidade;
 };
 
@@ -17,15 +16,11 @@ typedef struct teatro Teatro;
 
 int teatro_isNull(Teatro *teatro);
 
-Teatro *teatro_novo(int id, int capacidade);
-
-int teatro_getId(Teatro *teatro);
+Teatro *teatro_novo(int capacidade);
 
 int teatro_getCapacidade(Teatro *teatro);
 
 void teatro_setCapacidade(Teatro *teatro, int capacidade);
-
-int teatro_equals(Teatro *teatro, Teatro *outroTeatro);
 
 void teatro_print(Teatro* teatro);
 

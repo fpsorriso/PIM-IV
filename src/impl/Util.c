@@ -24,6 +24,9 @@ int char_IsCaracterControle(char caracter) {
 	}
 }
 
+/**
+ * Copia uma string para outra.
+ */
 void strCopy(char* source, char* destine) {
 	while (*source != '\0') {
 		*destine = *source;
@@ -34,6 +37,9 @@ void strCopy(char* source, char* destine) {
 	*destine = '\0';
 }
 
+/**
+ * Copia uma perte da String
+ */
 char* strSubstr(char* str, int indexInicial, int quantidadeCaracteres) {
 	int sizeStrOriginal = strlen(str);
 	int quantidadeCaracteresCopiar = quantidadeCaracteres > sizeStrOriginal ? sizeStrOriginal : quantidadeCaracteres;
@@ -48,6 +54,9 @@ char* strSubstr(char* str, int indexInicial, int quantidadeCaracteres) {
 	return result;
 }
 
+/**
+ * Remove os espaços em branco do lado direito
+ */
 char* strRTrim(char* str) {
 	if (str != NULL && strlen(str) > 0) {
 		int strSizeOriginal = strlen(str);
@@ -70,6 +79,9 @@ char* strRTrim(char* str) {
 	return str;
 }
 
+/**
+ * Remove os espaços em branco do lado esquedo
+ */
 char* strLTrim(char* str) {
 	if (str != NULL && strlen(str) > 0) {
 		int strSizeOriginal = strlen(str);
@@ -93,6 +105,9 @@ char* strLTrim(char* str) {
 
 }
 
+/**
+ * Remove os espaços em branco de ambos os lados
+ */
 char* strTrim(char* str) {
 	if (str != NULL && strlen(str) > 0) {
 		char* l = strLTrim(str);
@@ -108,6 +123,9 @@ char* strTrim(char* str) {
 	return str;
 }
 
+/**
+ * Verifica se uma String esta vazia.
+ */
 int strIsEmpty(char* str) {
 	if (str != NULL) {
 		char* t = strTrim(str);

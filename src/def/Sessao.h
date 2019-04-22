@@ -15,11 +15,8 @@
 
 struct sessao {
 	int id;
-	Teatro teatro;
 	Peca peca;
 	time_t dataHora;
-	double valorIngresso;
-
 };
 
 typedef struct sessao Sessao;
@@ -30,25 +27,19 @@ int sessao_getId(Sessao* sessao);
 
 Peca* sessao_getPeca(Sessao* sessao);
 
-Teatro* sessao_getTeatro(Sessao* sessao);
-
 time_t sessao_getDataHora(Sessao* sessao);
 
 char* sessao_getDataHoraStr(Sessao* sessao);
 
-void sessao_setDataHora(Sessao* sessao, time_t* dataHora);
+void sessao_setDataHora(Sessao* sessao, time_t dataHora);
 
 void sessao_setDataHoraStr(Sessao* sessao, char* dataHora);
-
-double sessao_getValorIngresso(Sessao* sessao);
-
-void sessao_setValorIngresso(Sessao* sessao, double valorIngresso);
 
 int sessao_isTercaFeira(Sessao* sessao);
 
 Sessao* sessao_nova(int id, Teatro* teatro, Peca* peca, char* dataHora, double valorIngresso);
 
-Sessao* sessao_busca(LinkedList* list, int id);
+Sessao* sessao_busca(LinkedList* list, int* id);
 
 void sessao_print(int comTeatro, int comPeca, Sessao* sessao);
 
