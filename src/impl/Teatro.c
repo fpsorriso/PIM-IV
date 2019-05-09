@@ -13,8 +13,8 @@
 
 #include "../def/Constante.h"
 
-int teatro_isNull(Teatro *teatro) {
-	if (teatro == NULL) {
+int teatro_isNull(Teatro *pTeatro){
+	if (pTeatro == NULL) {
 		return 1;
 	}
 
@@ -22,84 +22,68 @@ int teatro_isNull(Teatro *teatro) {
 }
 
 Teatro* teatro_novo(int id, int capacidade) {
-	Teatro* teatro = (Teatro *) calloc(1, sizeof *teatro);
+	Teatro* vTeatro = (Teatro *) calloc(1, sizeof(Teatro));
 
-	if (teatro == NULL) {
+	if (vTeatro == NULL) {
 		error(0, _ERROR_CODE_MEMORIA_INSUFICIENTE, _EXCEPTION_MEMORIA_INSUFICIENTE);
 		return NULL;
 	}
 
-	teatro->id = id;
-	teatro->capacidade = capacidade;
+	vTeatro->capacidade = capacidade;
 
-	return teatro;
+	return vTeatro;
 }
 
-int teatro_getId(Teatro *teatro) {
-	if (!teatro_isNull(teatro)) {
-		return (int) teatro->id;
+int teatro_getCapacidade(Teatro *pTeatro) {
+	if (!teatro_isNull(pTeatro)) {
+		return (int) pTeatro->capacidade;
 	}
 
 	return 0;
 }
 
-int teatro_getCapacidade(Teatro *teatro) {
-	if (!teatro_isNull(teatro)) {
-		return (int) teatro->capacidade;
-	}
-
-	return 0;
-}
-
-void teatro_setCapacidade(Teatro *teatro, int capacidade) {
-	if (!teatro_isNull(teatro)) {
-		teatro->capacidade = capacidade;
+void teatro_setCapacidade(Teatro *pTeatro, int capacidade) {
+	if (!teatro_isNull(pTeatro)) {
+		pTeatro->capacidade = capacidade;
 	}
 }
 
-int teatro_equals(Teatro *teatro, Teatro *outroTeatro) {
-	if (!teatro_isNull(teatro) && !teatro_isNull(outroTeatro)) {
-		return teatro->id == outroTeatro->id;
-	}
 
-	return teatro_isNull(teatro) && teatro_isNull(outroTeatro);
+void teatro_print(Teatro* pTeatro) {
+	printf("\n[Teatro] %d", teatro_getId(pTeatro));
 }
 
-void teatro_print(Teatro* teatro) {
-	printf("\n[Teatro] %d", teatro_getId(teatro));
-}
+Teatro* teatro_cadastra(Teatro* pTeatro) {
+	int vCapacidade;
+	int vNovoIdTeatro = 1;
+	char vOpcao;
 
-Teatro* teatro_cadastra(Teatro* teatro) {
-	int capacidade;
-	int novoIdTeatro = 1;
-	char opcao;
-
-	if (teatro_isNull(teatro)) {
+	if (teatro_isNull(pTeatro)) {
 		do {
-			capacidade = 0;
-			opcao = '\0';
+			vCapacidade = 0;
+			vOpcao = '\0';
 			printf("\nInformar a lota\u00E7\u00E3o do Teatro:");
-			scanf("%d", &capacidade);
+			scanf("%d", &vCapacidade);
 
-			if (capacidade == 0) {
+			if (vCapacidade == 0) {
 				fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "lota\u00E7\u00E3o");
 				fprintf(stderr, " %s", _MENSAGEM_INFORMAR_NOVAMENTE);
-				scanf("%s", &opcao);
-				capacidade = 0;
+				scanf("%s", &vOpcao);
+				vCapacidade = 0;
 			}
 
-		} while (capacidade == 0 && opcao == 's');
+		} while (vCapacidade == 0 && vOpcao == 's');
 
-		if (capacidade == 0) {
+		if (vCapacidade == 0) {
 			fprintf(stderr, _EXCEPTION_IMPOSSIVEL_CADASTRAR, "do Teatro");
 			return NULL;
 		}
 
-		return teatro_novo(novoIdTeatro, capacidade);
+		return teatro_novo(vNovoIdTeatro, vCapacidade);
 
 	} else {
 		fprintf(stderr, _EXCEPTION_CADASTRO_JA_EXISTENTE, " do Teatro");
-		teatro_print(teatro);
-		return teatro;
+		teatro_print(pTeatro);
+		return pTeatro;
 	}
 }

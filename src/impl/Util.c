@@ -12,7 +12,7 @@
 /**
  * Nao valida caracter de final de texto.
  */
-int char_IsCaracterControle(char caracter) {
+int char_IsCaracterControle(char pCaracter) {
 	switch (caracter) {
 	case '\n':
 	case '\t':
@@ -27,14 +27,14 @@ int char_IsCaracterControle(char caracter) {
 /**
  * Copia uma string para outra.
  */
-void strCopy(char* source, char* destine) {
-	while (*source != '\0') {
-		*destine = *source;
-		++destine;
-		++source;
+void strCopy(char* pSource, char* pDestine) {
+	while (*pSource != '\0') {
+		*pDestine = *pSource;
+		++pDestine;
+		++pSource;
 	}
 
-	*destine = '\0';
+	*pDestine = '\0';
 }
 
 /**

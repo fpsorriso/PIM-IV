@@ -8,12 +8,12 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-void strCopy(char* source, char* destine);
+void strCopy(char* pSource, char* pDestine);
 
-char* strSubstr(char* str, int indexInicial, int quantidadeCaracteres);
+char* strSubstr(char* pStr, int pIndexInicial, int pQuantidadeCaracteres);
 
-char* strTrim(char* str);
+char* strTrim(char* pStr);
 
-int stsIsEmpty(char* str);
+int stsIsEmpty(char* pStr);
 
 #endif /* DEF_UTIL_H_ */

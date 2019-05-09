@@ -13,104 +13,134 @@
 #include "../def/Util.h"
 #include "../def/Constante.h"
 
-int peca_isNull(Peca *peca) {
-	if (peca == NULL) {
+int peca_isNull(Peca* pPeca) {
+	if (pPeca == NULL) {
 		return 1;
 	}
 
 	return 0;
 }
 
-Peca* peca_novo(Teatro* pTeatro, char* pTitulo, double pValorIngresso) {
-	Peca *peca = (Peca*) calloc(1, sizeof(peca));
+Peca* peca_novo(Teatro pTeatro, char* pTitulo, double pValorIngresso) {
+	Peca *vPeca = (Peca*) calloc(1, sizeof(Peca));
 
-	if (peca == NULL) {
-		error(0, _ERROR_CODE_MEMORIA_INSUFICIENTE, _EXCEPTION_MEMORIA_INSUFICIENTE);
+	if (vPeca == NULL) {
+		printf("Ocorreu o um erro ao tentar criar uma nova pe\u00E7a. %d - %s",
+            _ERROR_CODE_MEMORIA_INSUFICIENTE, _EXCEPTION_MEMORIA_INSUFICIENTE);
 		return NULL;
 	}
 
-	peca->teatro = pTeatro;
-	peca->titulo = pTitulo;
-	peca->valorIngresso = pValorIngresso;
+	vPeca->teatro = pTeatro;
+	vPeca->titulo = pTitulo;
+	vPeca->valorIngresso = pValorIngresso;
 
-	return peca;
+	return vPeca;
 }
 
-int peca_getTeatro(Peca peca) {
-	if (!peca_isNull(peca)) {
-		return peca->teatro;
+Teatro peca_getTeatro(Peca pPeca) {
+	Teatro vResult;
+
+	if (!peca_isNull(&pPeca)) {
+		vResult = pPeca.teatro;
 	}
 
-	return nullptr;
+	return vResult;
 }
 
-char* peca_getTitulo(Peca *peca) {
-	if (!peca_isNull(peca)) {
-		return peca->titulo;
+char* peca_getTitulo(Peca pPeca) {
+	if (!peca_isNull(&pPeca)) {
+		return pPeca.titulo;
 	}
 
-	return NULL;
-
+	return calloc(1, sizeof(char));
 }
 
-void peca_setTitulo(Peca* peca, char* titulo) {
-	if (!peca_isNull(peca)) {
-		strCopy(titulo, peca->titulo);
+void peca_setTitulo(Peca* pPeca, char* pTitulo) {
+	if (!peca_isNull(pPeca)) {
+		strCopy(pTitulo, pPeca->titulo);
 	}
 }
 
-double sessao_getValorIngresso(Sessao* sessao) {
-	if (!sessao_isNull(sessao)) {
-		return sessao->valorIngresso;
+double peca_getValorIngresso(Peca pPeca) {
+	if (!peca_isNull(&pPeca)) {
+		return pPeca.valorIngresso;
 	}
 
 	return 0.00;
 }
 
-void sessao_setValorIngresso(Sessao* sessao, double valorIngresso) {
-	if (!sessao_isNull(sessao)) {
-		sessao->valorIngresso = valorIngresso;
+void peca_setValorIngresso(Peca* pPeca, double pValorIngresso) {
+	if (!pPeca_isNull(pPeca)) {
+		pPeca->valorIngresso = pValorIngresso;
 	}
 }
 
-void peca_print(Peca* peca) {
-	printf("\n[Peca] %d - %s", peca_getId(peca), peca_getTitulo(peca));
+void peca_print(Peca pPeca) {
+	printf("\n[Peca] %d - %s", peca_getId(pPeca), peca_getTitulo(pPeca));
 }
 
-Peca* peca_cadastro(Peca* peca) {
-	if (peca_isNull(peca)) {
+double informarValorIngresso() {
+	char vOpcao;
+	double vValorIngresso;
 
-		int novoIdPeca = 1;
-		char titulo[_SIZE_TITULO];
-		char opcao;
+	do {
+		vOpcao = '\0';
+		vValorIngresso = 0.00;
+		printf("Informe o valor do ingresso para a sess\u00E3o:\n");
+		scanf(" %2lf", &vValorIngresso);
+
+		if (vValorIngresso == 0) {
+			fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "Valor do Ingresso");
+			fprintf(stderr, " ");
+			fprintf(stderr, _MENSAGEM_INFORMAR_NOVAMENTE);
+			scanf(" %c", &vOpcao);
+		}
+	} while (vValorIngresso == 0 && vOpcao == 's');
+
+	return vValorIngresso;
+}
+
+Peca* peca_cadastro(Peca* pPeca) {
+	if (peca_isNull(pPeca)) {
+
+		int vNovoIdPeca = 1;
+		char vTitulo[_SIZE_TITULO];
+		char vOpcao;
 
 		do {
-			titulo[0] = '\0';
-			opcao = '\0';
+			vTitulo[0] = '\0';
+			vOpcao = '\0';
 
 			__fpurge(stdin);
 			printf("\nInforme o titulo da Pe\u00E7a:");
-			fgets(titulo, _SIZE_TITULO, stdin);
+			fgets(vTitulo, _SIZE_TITULO, stdin);
 
 
-			if (strIsEmpty(titulo)) {
+			if (strIsEmpty(vTitulo)) {
 				fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "Titulo");
 				fprintf(stderr, " ");
 				fprintf(stderr, _MENSAGEM_INFORMAR_NOVAMENTE);
-				scanf("%s", &opcao);
+				scanf("%s", &vOpcao);
 			}
 
-		} while(strIsEmpty(titulo) && opcao == 's');
+		} while(strIsEmpty(vTitulo) && vOpcao == 's');
 
-		if (strlen(titulo) == 0) {
+		if (strlen(vTitulo) == 0) {
 			fprintf(stderr, _ERROR_CODE_IMPOSSIVEL_CADASTRAR, "da Pe\u00E7a");
 			return NULL;
 		}
 
-		return peca_novo(novoIdPeca, titulo);
+		double vValorIngresso = informarValorIngresso();
+
+		if (vValorIngresso == 0) {
+				fprintf(stderr, _EXCEPTION_IMPOSSIVEL_CADASTRAR, "da Sess\u00E3o");
+				return NULL;
+		}
+
+		return peca_novo(vNovoIdPeca, vTitulo, vValorIngresso);
 	} else {
 		fprintf(stderr, _EXCEPTION_CADASTRO_JA_EXISTENTE, "Pe\u00E7a");
-		peca_print(peca);
-		return peca;
+		peca_print(pPeca);
+		return pPeca;
 	}
 }

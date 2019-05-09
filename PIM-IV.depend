@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1555932826 source:/home/confidence/Documents/unip/PIM/IV/src/impl/LinkedList.c
+	"../def/LinkedList.h"
+	<stdlib.h>
+	<stdio.h>
+	"../def/Constante.h"
+
+1555932826 /home/confidence/Documents/unip/PIM/IV/src/def/LinkedList.h
+
+1555932826 /home/confidence/Documents/unip/PIM/IV/src/def/Constante.h
+
+1555946829 source:/home/confidence/Documents/unip/PIM/IV/src/impl/Menu.c
+	"../def/Menu.h"
+	<stdio.h>
+	<string.h>
+	"../def/Util.h"
+
+1555932826 /home/confidence/Documents/unip/PIM/IV/src/def/Menu.h
+
+1556034318 /home/confidence/Documents/unip/PIM/IV/src/def/Util.h
+

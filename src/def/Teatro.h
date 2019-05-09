@@ -8,22 +8,20 @@
 #ifndef _TEATRO_H_
 #define _TEATRO_H_
 
-struct teatro {
+typedef struct {
 	int capacidade;
-};
+} Teatro;
 
-typedef struct teatro Teatro;
-
-int teatro_isNull(Teatro *teatro);
+int teatro_isNull(Teatro *pTeatro);
 
 Teatro *teatro_novo(int capacidade);
 
-int teatro_getCapacidade(Teatro *teatro);
+int teatro_getCapacidade(Teatro *pTeatro);
 
-void teatro_setCapacidade(Teatro *teatro, int capacidade);
+void teatro_setCapacidade(Teatro *pTeatro, int capacidade);
 
-void teatro_print(Teatro* teatro);
+void teatro_print(Teatro* pTeatro);
 
-Teatro* teatro_cadastra(Teatro* teatro);
+Teatro* teatro_cadastra(Teatro* pTeatro);
 
 #endif /* _TEATRO_H_ */

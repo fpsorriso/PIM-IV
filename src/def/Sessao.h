@@ -11,7 +11,6 @@
 #include <time.h>
 #include "LinkedList.h"
 #include "Peca.h"
-#include "Teatro.h"
 
 struct sessao {
 	int id;

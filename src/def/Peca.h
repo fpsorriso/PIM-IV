@@ -9,22 +9,23 @@
 #define _PECA_H_
 
 #define _SIZE_TITULO 50
+#include "Teatro.h"
 
-struct peca {
+typedef struct {
 	Teatro teatro;
 	char* titulo;
 	double valorIngresso;
-};
+} Peca;
 
-typedef struct peca Peca;
+int peca_isNull(Peca* peca);
 
-int peca_isNull(Peca *peca);
-
-Peca* peca_novo(int id, char *titulo);
+Peca* peca_novo(Teatro pTeatro, char* pTitulo, double pValorIngresso);
 
 Teatro peca_getTeatro(Peca peca);
 
 char* peca_getTitulo(Peca peca);
+
+void peca_setTitulo(Peca* pPeca, char* pTitulo);
 
 double peca_getValorIngresso(Peca peca);
 

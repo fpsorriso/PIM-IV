@@ -46,7 +46,7 @@ void imprimeTextoCentralizado(int tamanhoBarra, char* texto) {
 			}
 		}
 
-		printf(texto);
+		printf("%s", texto);
 	}
 }
 
@@ -137,13 +137,18 @@ void executaOpcao(int tamanhoMenu, int opcao) {
 	}
 }
 
+void clear() {
+    for (int i = 0; i< 50; i++) {
+        printf("\n");
+    }
+}
+
 void exibeMenuPrincipal() {
 	int opcaoMenu = 0;
 
 	do {
 		opcaoMenu = 0;
-		system("clean");
-		system("clear");
+		clear();
 		imprimeMenu(_TAMANHO_MENU);
 		scanf("%d", &opcaoMenu);
 		executaOpcao(_TAMANHO_MENU, opcaoMenu);
