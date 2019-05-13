@@ -33,6 +33,6 @@ void peca_setValorIngresso(Peca* peca, double valorIngresso);
 
 void peca_print(Peca peca);
 
-Peca* peca_cadastro(Peca* peca);
+Peca* peca_cadastro(Teatro pTeatro);
 
 #endif /* _PECA_H_ */

@@ -14,36 +14,29 @@
 #include "../def/Constante.h"
 #include "../def/Util.h"
 
-int sessao_isNull(Sessao* sessao) {
-	if (sessao == NULL) {
+int sessao_isNull(Sessao sessao) {
+	if (&sessao == NULL) {
 		return 1;
 	}
 
 	return 0;
 }
 
-int sessao_dataIsNull(Sessao* sessao) {
-	if (sessao->dataHora == (time_t) -1) {
+int sessao_dataIsNull(Sessao sessao) {
+	if (sessao.dataHora == (time_t) -1) {
 		return 1;
 	}
 
 	return 0;
 }
 
-int sessao_getId(Sessao* sessao) {
+
+Peca sessao_getPeca(Sessao sessao) {
 	if (!sessao_isNull(sessao)) {
-		return (int) sessao->id;
+		return sessao.peca;
 	}
 
-	return (int) 0;
-}
-
-Peca* sessao_getPeca(Sessao* sessao) {
-	if (!sessao_isNull(sessao)) {
-		return &sessao->peca;
-	}
-
-	return NULL;
+	return peca_novo();
 }
 
 void sessao_setPeca(Sessao* sessao, Peca* peca) {
@@ -52,7 +45,7 @@ void sessao_setPeca(Sessao* sessao, Peca* peca) {
 	}
 }
 
-time_t sessao_getDataHora(Sessao* sessao) {
+time_t sessao_getDataHora(Sessao sessao) {
 	if (!sessao_isNull(sessao)) {
 		return sessao->dataHora;
 	}
@@ -60,7 +53,7 @@ time_t sessao_getDataHora(Sessao* sessao) {
 	return NULL;
 }
 
-char* sessao_getDataHoraStr(Sessao* sessao) {
+char* sessao_getDataHoraStr(Sessao sessao) {
 	char *result = calloc(1, sizeof(char));
 
 	if (!sessao_isNull(sessao) && !sessao_dataIsNull(sessao)) {
@@ -90,7 +83,7 @@ void sessao_setDataHoraStr(Sessao* sessao, char* dataHora) {
 	}
 }
 
-int sessao_isTercaFeira(Sessao* sessao) {
+int sessao_isTercaFeira(Sessao sessao) {
 	if (!sessao_isNull(sessao) && sessao->dataHora ) {
 		struct tm *data = localtime(&sessao->dataHora);
 
@@ -105,28 +98,26 @@ int sessao_isTercaFeira(Sessao* sessao) {
 	return 0;
 }
 
-Sessao* sessao_nova(int id, Teatro* teatro, Peca* peca, char* dataHora, double valorIngresso) {
-	Sessao* sessao = (Sessao*) calloc(1, sizeof(Sessao));
+Sessao sessao_nova(Peca* pPeca, char* pDataHora) {
+	Sessao sessao = (Sessao*) calloc(1, sizeof(Sessao));
 
-	if (sessao == NULL) {
-		error(0, _ERROR_CODE_MEMORIA_INSUFICIENTE, _EXCEPTION_MEMORIA_INSUFICIENTE);
+	if (&sessao == NULL) {
+		printf(_EXCEPTION_MEMORIA_INSUFICIENTE);
 		return NULL;
 	}
 
-	sessao->id = id;
-	sessao->teatro = *teatro;
-	sessao->peca = *peca;
-	sessao->valorIngresso = valorIngresso;
+	sessao.peca = pPeca;
+	sessao_setDataHoraStr(sessao, pDataHora);
 
 	return sessao;
 }
 
-static comparable* sessao_comparableId(Sessao* sessao, int id) {
-	return sessao_getId(sessao) == id;
+static comparable* sessao_comparableId(Sessao* sessao, char* pDataHora) {
+	return strcmp(sessao_getDataHoraStr(sessao), pDataHora);
 }
 
-Sessao* sessao_busca(LinkedList* list, int* id) {
-	Node* node = linkedList_search(list, id, sessao_comparableId);
+Sessao* sessao_busca(LinkedList* pList, char* pDataHora) {
+	Node* node = linkedList_search(pList, pDataHora, sessao_comparableId);
 
 	if (node != NULL) {
 		return (Sessao*) node->value;
@@ -135,32 +126,16 @@ Sessao* sessao_busca(LinkedList* list, int* id) {
 	return NULL;
 }
 
-void sessao_print(int comTeatro, int comPeca, Sessao* sessao) {
-	if (comTeatro) {
-		teatro_print(&sessao->teatro);
-	}
-
-	if (comPeca) {
-		peca_print(&sessao->peca);
-	}
-
-	printf("\n\t[Sess\u00E3o] %d - %s - R$ %.2f", sessao_getId(sessao), sessao_getDataHoraStr(sessao), sessao_getValorIngresso(sessao));
+void sessao_print(Sessao sessao) {
+	peca_print(sessao.peca);
+	printf("\n\t[Sess\u00E3o] %s - R$ %.2f", sessao_getDataHoraStr(sessao), peca_getValorIngresso(sessao.peca));
 }
 
-void sessao_simplePrint(Sessao* sessao) {
-	printf("\n\t[Sessao] %d - %s", sessao_getId(sessao), sessao_getDataHoraStr(sessao));
-}
-
-LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
+LinkedList* sessao_cadastra(LinkedList* list, Peca* peca) {
 	char dataHora[strlen(_ISO_DATE_TIME_VIEW)];
 	double valorIngresso = 0;
 	int novoIdSessao = linkedList_count(list) + 1;
 	char opcao;
-
-	if (teatro_isNull(teatro)) {
-		fprintf(stderr, _EXCEPTION_NULL_POINT, "O teatro");
-		return list;
-	}
 
 	if (peca_isNull(peca)) {
 		fprintf(stderr, _EXCEPTION_NULL_POINT, "A pe\00F7a");
@@ -188,5 +163,5 @@ LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca) {
 		return list;
 	}
 
-	return linkedList_put(sessao_nova(novoIdSessao, teatro, peca, dataHora), list);
+	return linkedList_put(sessao_nova(peca, dataHora), list);
 }

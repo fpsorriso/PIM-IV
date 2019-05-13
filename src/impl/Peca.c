@@ -86,7 +86,7 @@ double informarValorIngresso() {
 	do {
 		vOpcao = '\0';
 		vValorIngresso = 0.00;
-		printf("Informe o valor do ingresso para a sess\u00E3o:\n");
+		printf("\nInforme o valor do ingresso: ");
 		scanf(" %2lf", &vValorIngresso);
 
 		if (vValorIngresso == 0) {
@@ -100,8 +100,8 @@ double informarValorIngresso() {
 	return vValorIngresso;
 }
 
-Peca* peca_cadastro(Peca* pPeca) {
-	if (peca_isNull(pPeca)) {
+Peca* peca_cadastro(Teatro pTeatro) {
+	if (!teatro_isNull(&pTeatro)) {
 
 		int vNovoIdPeca = 1;
 		char vTitulo[_SIZE_TITULO];
@@ -137,10 +137,9 @@ Peca* peca_cadastro(Peca* pPeca) {
 				return NULL;
 		}
 
-		return peca_novo(vNovoIdPeca, vTitulo, vValorIngresso);
+		return peca_novo(pTeatro, vTitulo, vValorIngresso);
 	} else {
 		fprintf(stderr, _EXCEPTION_CADASTRO_JA_EXISTENTE, "Pe\u00E7a");
-		peca_print(pPeca);
-		return pPeca;
+		return NULL;
 	}
 }

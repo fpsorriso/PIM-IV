@@ -13,7 +13,6 @@
 #include "Peca.h"
 
 struct sessao {
-	int id;
 	Peca peca;
 	time_t dataHora;
 };
@@ -21,8 +20,6 @@ struct sessao {
 typedef struct sessao Sessao;
 
 int sessao_isNull(Sessao* sessao);
-
-int sessao_getId(Sessao* sessao);
 
 Peca* sessao_getPeca(Sessao* sessao);
 
@@ -36,9 +33,9 @@ void sessao_setDataHoraStr(Sessao* sessao, char* dataHora);
 
 int sessao_isTercaFeira(Sessao* sessao);
 
-Sessao* sessao_nova(int id, Teatro* teatro, Peca* peca, char* dataHora, double valorIngresso);
+Sessao* sessao_nova(int id, Peca* peca, char* dataHora);
 
-Sessao* sessao_busca(LinkedList* list, int* id);
+Sessao* sessao_busca(LinkedList* list, char* dataHora);
 
 void sessao_print(int comTeatro, int comPeca, Sessao* sessao);
 
