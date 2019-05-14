@@ -17,22 +17,24 @@ typedef struct {
 	double valorIngresso;
 } Peca;
 
-int peca_isNull(Peca* peca);
+Peca pecaVazia();
 
-Peca* peca_novo(Teatro pTeatro, char* pTitulo, double pValorIngresso);
+int pecaIsNull(Peca peca);
 
-Teatro peca_getTeatro(Peca peca);
+Peca pecaNova(Teatro pTeatro, char* pTitulo, double pValorIngresso);
 
-char* peca_getTitulo(Peca peca);
+Teatro pecaGetTeatro(Peca peca);
 
-void peca_setTitulo(Peca* pPeca, char* pTitulo);
+char* pecaGetTitulo(Peca peca);
 
-double peca_getValorIngresso(Peca peca);
+void pecaSetTitulo(Peca pPeca, char* pTitulo);
 
-void peca_setValorIngresso(Peca* peca, double valorIngresso);
+double pecaGetValorIngresso(Peca peca);
 
-void peca_print(Peca peca);
+void pecaSetValorIngresso(Peca peca, double valorIngresso);
 
-Peca* peca_cadastro(Teatro pTeatro);
+void pecaPrint(Peca peca);
+
+Peca pecaCadastro(Teatro pTeatro);
 
 #endif /* _PECA_H_ */

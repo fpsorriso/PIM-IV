@@ -19,28 +19,26 @@ struct sessao {
 
 typedef struct sessao Sessao;
 
-int sessao_isNull(Sessao* sessao);
+int sessao_isNull(Sessao sessao);
 
-Peca* sessao_getPeca(Sessao* sessao);
+Peca* sessao_getPeca(Sessao sessao);
 
-time_t sessao_getDataHora(Sessao* sessao);
+time_t sessao_getDataHora(Sessao sessao);
 
-char* sessao_getDataHoraStr(Sessao* sessao);
+char* sessao_getDataHoraStr(Sessao sessao);
 
 void sessao_setDataHora(Sessao* sessao, time_t dataHora);
 
 void sessao_setDataHoraStr(Sessao* sessao, char* dataHora);
 
-int sessao_isTercaFeira(Sessao* sessao);
+int sessao_isTercaFeira(Sessao sessao);
 
-Sessao* sessao_nova(int id, Peca* peca, char* dataHora);
+Sessao* sessao_nova(Peca peca, char* dataHora);
 
 Sessao* sessao_busca(LinkedList* list, char* dataHora);
 
-void sessao_print(int comTeatro, int comPeca, Sessao* sessao);
+void sessao_print(Sessao sessao);
 
-void sessao_simplePrint(Sessao* sessao);
-
-LinkedList* sessao_cadastra(LinkedList* list, Teatro* teatro, Peca* peca);
+LinkedList* sessao_cadastra(LinkedList* list, Peca peca);
 
 #endif /* _SESSAO_H_ */

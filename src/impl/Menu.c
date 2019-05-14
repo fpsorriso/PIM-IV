@@ -107,7 +107,7 @@ void executaOpcao(int tamanhoMenu, int opcao) {
 	switch (opcao) {
 		case _CADASTRO_TEATRO: {
 			cadastro_teatro(tamanhoMenu);
-			teatro_cadastra();
+			teatroCadastra();
 			break;
 		}
 		case _CADASTRO_PECA: {

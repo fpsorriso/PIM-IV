@@ -12,16 +12,18 @@ typedef struct {
 	int capacidade;
 } Teatro;
 
-int teatro_isNull(Teatro *pTeatro);
+Teatro teatroVazio();
 
-Teatro *teatro_novo(int capacidade);
+int teatroIsNull(Teatro pTeatro);
 
-int teatro_getCapacidade(Teatro *pTeatro);
+Teatro teatroNovo(int capacidade);
 
-void teatro_setCapacidade(Teatro *pTeatro, int capacidade);
+int teatroGetCapacidade(Teatro pTeatro);
 
-void teatro_print(Teatro* pTeatro);
+void teatroSetCapacidade(Teatro pTeatro, int capacidade);
 
-Teatro* teatro_cadastra(Teatro* pTeatro);
+void teatroPrint(Teatro pTeatro);
+
+Teatro teatroCadastra();
 
 #endif /* _TEATRO_H_ */

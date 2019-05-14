@@ -36,7 +36,7 @@ Peca sessao_getPeca(Sessao sessao) {
 		return sessao.peca;
 	}
 
-	return peca_novo();
+	return pecaNova(NULL, "", 0.00);
 }
 
 void sessao_setPeca(Sessao* sessao, Peca* peca) {
@@ -127,8 +127,8 @@ Sessao* sessao_busca(LinkedList* pList, char* pDataHora) {
 }
 
 void sessao_print(Sessao sessao) {
-	peca_print(sessao.peca);
-	printf("\n\t[Sess\u00E3o] %s - R$ %.2f", sessao_getDataHoraStr(sessao), peca_getValorIngresso(sessao.peca));
+	pecaPrint(sessao.peca);
+	printf("\n\t[Sess\u00E3o] %s - R$ %.2f", sessao_getDataHoraStr(sessao), pecaGetValorIngresso(sessao.peca));
 }
 
 LinkedList* sessao_cadastra(LinkedList* list, Peca* peca) {
@@ -137,7 +137,7 @@ LinkedList* sessao_cadastra(LinkedList* list, Peca* peca) {
 	int novoIdSessao = linkedList_count(list) + 1;
 	char opcao;
 
-	if (peca_isNull(peca)) {
+	if (pecaIsNull(peca)) {
 		fprintf(stderr, _EXCEPTION_NULL_POINT, "A pe\00F7a");
 		return list;
 	}
