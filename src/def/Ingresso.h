@@ -7,11 +7,9 @@
 
 #ifndef _INGRESSO_H_
 #define _INGRESSO_H_
-
 #include "Venda.h"
 
-struct ingresso {
-	int id;
+typedef struct {
 	Venda* venda;
 	int poltrona;
 	double valorUnitario;
@@ -20,28 +18,25 @@ struct ingresso {
 	int crianca2A12; //1 - True| 0 - False
 	int professorRedePublica; //1 - True| 0 - False
 	int alunoRedePublica; //1 - True| 0 - False
-};
+} Ingresso;
 
-typedef struct ingresso Ingresso;
+int ingressoIsNull(Ingresso pIngresso);
 
-int ingresso_isNull(Ingresso *ingresso);
+int ingressoIsMeiaEntrada(Ingresso pIngresso);
 
-int ingresso_isMeiaEntrada(Ingresso* ingresso);
+int ingressoGratis(Ingresso pIngresso);
 
-int ingresso_gratis(Ingresso* ingresso);
+double ingressoCalculaDesconto(Ingresso pIngresso);
 
-double ingresso_calculaDesconto(Ingresso *ingresso);
+int ingressoGetPoltrona(Ingresso pIngresso);
 
-int ingresso_getId(Ingresso* ingresso);
+double ingressoGetValorUnitario(Ingresso pIngresso);
 
-Venda* ingresso_getVenda(Ingresso* ingresso);
+double ingressoGetValorDesconto(Ingresso pIngresso);
 
-int ingresso_getPoltrona(Ingresso* ingresso);
+Ingresso ingressoNew(Venda pVenda, int pPoltrona, int pIdoso, int pCrianca2a12,
+		int pProfessorRedePublica, int pAlunoRedePublica);
 
-double ingresso_getValorUnitario(Ingresso* ingresso);
-
-double ingresso_getValorDesconto(Ingresso* ingresso);
-
-Ingresso* ingresso_novo(int id, Venda *venda, int poltrona, int idoso, int crianca2a12, int professorRedePublica, int alunoRedePublica);
+Venda* ingressoGetVenda(Ingresso pIngresso);
 
 #endif /* _INGRESSO_H_ */

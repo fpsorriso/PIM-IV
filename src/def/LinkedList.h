@@ -8,31 +8,31 @@
 #ifndef _LINKEDLIST_H_
 #define _LINKEDLIST_H_
 
-struct node {
+struct sNode {
 	void* value;
-	struct node* next;
+	struct sNode* next;
 };
 
-typedef struct node Node;
-typedef struct node LinkedList;
+typedef struct sNode Node;
+typedef Node LinkedList;
 
-typedef int (*comparable)(void* value, void* anotherValue);
-typedef void (*callback)(Node* value);
+typedef int (*comparable)(void* pValue, void* pAnotherValue);
+typedef void (*callback)(Node* pValue);
 
-LinkedList* linkedList_put(void* value, Node* next);
+LinkedList* linkedListPut(void* pValue, Node* pNext);
 
-int linkedList_count(LinkedList* head);
+int linkedListCount(LinkedList* pHead);
 
-Node* linkedList_search(LinkedList* head, void* value, comparable compareFunction);
+Node* linkedListSearch(LinkedList* pHead, void* pValue, comparable pCompareFunction);
 
-Node* linkedList_removeFront(LinkedList* head);
+Node* linkedListRemoveFront(LinkedList* pHead);
 
-Node* linkedList_removeBack(LinkedList* head);
+Node* linkedListRemoveBack(LinkedList* pHead);
 
-Node* linkedList_remove(LinkedList* head, Node* node);
+Node* linkedListRemove(LinkedList* pHead, Node* node);
 
-void linkedList_foreach(LinkedList* head, callback function);
+void linkedListForeach(LinkedList* pHead, callback function);
 
-void linkedList_dispose(Node *head);
+void linkedListDispose(Node *pHead);
 
 #endif /* _LINKEDLIST_H_ */

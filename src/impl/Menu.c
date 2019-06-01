@@ -112,6 +112,7 @@ void executaOpcao(int tamanhoMenu, int opcao) {
 		}
 		case _CADASTRO_PECA: {
 			cadastro_peca(tamanhoMenu);
+			pecaCadastro();
 			break;
 		}
 
@@ -130,8 +131,12 @@ void executaOpcao(int tamanhoMenu, int opcao) {
 			break;
 		}
 
+		case _SAIR: {
+			break;
+		}
+
 		default: {
-			fprintf(stderr, "Op\u00E7\u00E3o invalida.");
+			printf(stderr, "Op\u00E7\u00E3o invalida.");
 			break;
 		}
 	}

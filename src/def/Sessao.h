@@ -13,32 +13,37 @@
 #include "Peca.h"
 
 struct sessao {
+	int id;
 	Peca peca;
 	time_t dataHora;
 };
 
 typedef struct sessao Sessao;
 
-int sessao_isNull(Sessao sessao);
+Sessao sessaoEmpty();
 
-Peca* sessao_getPeca(Sessao sessao);
+int sessaoIsNull(Sessao pSessao);
 
-time_t sessao_getDataHora(Sessao sessao);
+Peca sessaoGetPeca(Sessao pSessao);
 
-char* sessao_getDataHoraStr(Sessao sessao);
+time_t sessaoGetDataHora(Sessao pSessao);
 
-void sessao_setDataHora(Sessao* sessao, time_t dataHora);
+char* sessaoGetDataHoraStr(Sessao pSessao);
 
-void sessao_setDataHoraStr(Sessao* sessao, char* dataHora);
+void sessaoSetDataHora(Sessao pSessao, time_t pDateTime);
 
-int sessao_isTercaFeira(Sessao sessao);
+void sessaoSetDataHoraStr(Sessao pSessao, char* pDateTime);
 
-Sessao* sessao_nova(Peca peca, char* dataHora);
+int sessaoIsTercaFeira(Sessao pSessao);
 
-Sessao* sessao_busca(LinkedList* list, char* dataHora);
+int sessaoGetId(Sessao pSessao);
 
-void sessao_print(Sessao sessao);
+Sessao sessaoNew(int pId, Peca pPeca, char* pDateTime);
 
-LinkedList* sessao_cadastra(LinkedList* list, Peca peca);
+Sessao* sessaoFind(LinkedList* pList, int pId);
+
+void sessaoPrint(Sessao pSessao);
+
+LinkedList* sessaoAddToList(LinkedList* pList, Peca pPeca);
 
 #endif /* _SESSAO_H_ */

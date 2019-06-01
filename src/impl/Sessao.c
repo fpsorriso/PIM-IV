@@ -14,16 +14,16 @@
 #include "../def/Constante.h"
 #include "../def/Util.h"
 
-int sessao_isNull(Sessao sessao) {
-	if (&sessao == NULL) {
+int sessaoIsNull(Sessao pSessao) {
+	if (&pSessao == NULL) {
 		return 1;
 	}
 
 	return 0;
 }
 
-int sessao_dataIsNull(Sessao sessao) {
-	if (sessao.dataHora == (time_t) -1) {
+int sessaoDataIsNull(Sessao pSessao) {
+	if (pSessao.dataHora == (time_t) -1) {
 		return 1;
 	}
 
@@ -31,137 +31,139 @@ int sessao_dataIsNull(Sessao sessao) {
 }
 
 
-Peca sessao_getPeca(Sessao sessao) {
-	if (!sessao_isNull(sessao)) {
-		return sessao.peca;
+Peca sessaoGetPeca(Sessao pSessao) {
+	if (!sessaoIsNull(pSessao)) {
+		return pSessao.peca;
 	}
 
-	return pecaNova(NULL, "", 0.00);
+	return pecaVazia();
 }
 
-void sessao_setPeca(Sessao* sessao, Peca* peca) {
-	if (!sessao_isNull(sessao)) {
-		sessao->peca = *peca;
-	}
-}
-
-time_t sessao_getDataHora(Sessao sessao) {
-	if (!sessao_isNull(sessao)) {
-		return sessao->dataHora;
+time_t sessaoGetDataHora(Sessao pSessao) {
+	if (!sessaoIsNull(pSessao)) {
+		return pSessao.dataHora;
 	}
 
 	return NULL;
 }
 
-char* sessao_getDataHoraStr(Sessao sessao) {
-	char *result = calloc(1, sizeof(char));
+char* sessaoGetDataHoraStr(Sessao pSessao) {
+	char *vResult = calloc(1, sizeof(char));
 
-	if (!sessao_isNull(sessao) && !sessao_dataIsNull(sessao)) {
-		struct tm* data = localtime(&sessao->dataHora);
-		strftime(result, sizeof(result), _ISO_DATE_TIME, data);
-		free(data);
+	if (!sessaoIsNull(pSessao) && !sessaoDataIsNull(pSessao)) {
+		Sessao* vPointer = &pSessao;
+		struct tm* vDate = localtime(vPointer->dataHora);
+		strftime(vResult, sizeof(vResult), _ISO_DATE_TIME, vDate);
+		free(vDate);
 	}
 
-	return (char *) result;
+	return (char *) vResult;
 }
 
-void sessao_setDataHora(Sessao* sessao, time_t dataHora) {
-	if (!sessao_isNull(sessao)) {
-		sessao->dataHora = dataHora;
+void sessaoSetDataHora(Sessao pSessao, time_t pDateTime) {
+	if (!sessaoIsNull(pSessao)) {
+		pSessao.dataHora = pDateTime;
 	}
 }
 
-void sessao_setDataHoraStr(Sessao* sessao, char* dataHora) {
-	if (!sessao_isNull(sessao)) {
-		if (strlen(dataHora) > 0) {
-			struct tm data;
-			strptime(dataHora, _ISO_DATE_TIME, &data);
-			sessao->dataHora = mktime(&data);
+void sessaoSetDataHoraStr(Sessao pSessao, char* pDateTime) {
+	if (!sessaoIsNull(pSessao)) {
+		if (strlen(pDateTime) > 0) {
+			struct tm vDate;
+			strptime(pDateTime, _ISO_DATE_TIME, &vDate);
+			pSessao.dataHora = mktime(&vDate);
 		} else {
-			sessao->dataHora = (time_t) -1;
+			pSessao.dataHora = (time_t) -1;
 		}
 	}
 }
+int sessaoIsTercaFeira(Sessao pSessao) {
+	if (!sessaoIsNull(pSessao) && pSessao.dataHora ) {
+		Sessao* vPointer = &pSessao;
+		struct tm* vDate = localtime(vPointer->dataHora);
 
-int sessao_isTercaFeira(Sessao sessao) {
-	if (!sessao_isNull(sessao) && sessao->dataHora ) {
-		struct tm *data = localtime(&sessao->dataHora);
-
-		if (data->tm_wday == 2) {
-			free(data);
+		if (vDate->tm_wday == 2) {
+			free(vDate);
 			return 1;
 		}
 
-		free(data);
+		free(vDate);
 	}
 
 	return 0;
 }
 
-Sessao sessao_nova(Peca* pPeca, char* pDataHora) {
-	Sessao sessao = (Sessao*) calloc(1, sizeof(Sessao));
+Sessao sessaoNew(int pId, Peca pPeca, char* pDataHora) {
+	Sessao vSessao;
+	vSessao.id = pId;
+	vSessao.peca = pPeca;
+	sessaoSetDataHoraStr(vSessao, pDataHora);
 
-	if (&sessao == NULL) {
-		printf(_EXCEPTION_MEMORIA_INSUFICIENTE);
-		return NULL;
+	return vSessao;
+}
+
+int sessaoGetId(Sessao pSessao) {
+	if (!sessaoIsNull(pSessao)) {
+		return pSessao.id;
 	}
 
-	sessao.peca = pPeca;
-	sessao_setDataHoraStr(sessao, pDataHora);
-
-	return sessao;
+	return 0;
 }
 
-static comparable* sessao_comparableId(Sessao* sessao, char* pDataHora) {
-	return strcmp(sessao_getDataHoraStr(sessao), pDataHora);
+static comparable* sessaoComparable(Sessao pSessao, int pId) {
+	return sessaoGetId(pSessao) == pId;
 }
 
-Sessao* sessao_busca(LinkedList* pList, char* pDataHora) {
-	Node* node = linkedList_search(pList, pDataHora, sessao_comparableId);
+Sessao* sessaoFind(LinkedList* pList, int pId) {
+	Node* vNode = linkedListSearch(pList, pId, sessaoComparable);
 
-	if (node != NULL) {
-		return (Sessao*) node->value;
+	if (vNode != NULL) {
+		return (Sessao*) vNode->value;
 	}
 
 	return NULL;
 }
 
-void sessao_print(Sessao sessao) {
-	pecaPrint(sessao.peca);
-	printf("\n\t[Sess\u00E3o] %s - R$ %.2f", sessao_getDataHoraStr(sessao), pecaGetValorIngresso(sessao.peca));
+void sessaoPrint(Sessao pSessao) {
+	pecaPrint(pSessao.peca);
+	printf("\n\t[Sess\u00E3o] %s - R$ %.2f", sessaoGetDataHoraStr(pSessao), pecaGetValorIngresso(pSessao.peca));
 }
 
-LinkedList* sessao_cadastra(LinkedList* list, Peca* peca) {
-	char dataHora[strlen(_ISO_DATE_TIME_VIEW)];
-	double valorIngresso = 0;
-	int novoIdSessao = linkedList_count(list) + 1;
-	char opcao;
-
-	if (pecaIsNull(peca)) {
-		fprintf(stderr, _EXCEPTION_NULL_POINT, "A pe\00F7a");
-		return list;
-	}
+char requestDateTimeOfSession() {
+	char vDateTime[strlen(_ISO_DATE_TIME_VIEW)];
+	char vOption;
 
 	do {
-		dataHora[0] = '\0';
-		opcao = '\0';
+		vDateTime[0] = '\0';
+		vOption = '\0';
+		printf("Informe a data e hora da sess\u00E3o (%s):\n",
+				_ISO_DATE_TIME_VIEW);
+		fgets(vDateTime, strlen(_ISO_DATE_TIME_VIEW) + 1, stdin);
 
-		printf("Informe a data e hora da sess\u00E3o (%s):\n", _ISO_DATE_TIME_VIEW);
-		fgets(dataHora, strlen(_ISO_DATE_TIME_VIEW) + 1, stdin);
-
-		if (strIsEmpty(dataHora) || strlen(strTrim(dataHora)) != strlen(_ISO_DATE_TIME_VIEW)) {
-			fprintf(stderr, _EXCEPTION_CAMPO_OBRIGATORIO, "Data e Hora");
-			fprintf(stderr, " ");
-			fprintf(stderr, _MENSAGEM_INFORMAR_NOVAMENTE);
-			scanf(" %c", &opcao);
+		if (strIsEmpty(vDateTime)
+				|| strlen(strTrim(vDateTime)) != strlen(_ISO_DATE_TIME_VIEW)) {
+			printf(_EXCEPTION_CAMPO_OBRIGATORIO, "Data e Hora");
+			printf(_MENSAGEM_INFORMAR_NOVAMENTE);
+			scanf(" %c", &vOption);
 		}
+	} while ((strIsEmpty(vDateTime)
+			|| strlen(strTrim(vDateTime)) != strlen(_ISO_DATE_TIME_VIEW))
+			&& vOption == 's');
+	return vDateTime;
+}
 
-	} while ((strIsEmpty(dataHora) || strlen(strTrim(dataHora)) != strlen(_ISO_DATE_TIME_VIEW)) && opcao == 's');
+LinkedList* sessaoAddToList(LinkedList* pList, Peca pPeca) {
+	char* vDateTime;
 
-	if (strIsEmpty(dataHora)) {
-		fprintf(stderr, _EXCEPTION_IMPOSSIVEL_CADASTRAR, "da Sess\u00E3o");
-		return list;
+	vDateTime = requestDateTimeOfSession();
+
+	if (strIsEmpty(vDateTime)) {
+		printf(_EXCEPTION_IMPOSSIVEL_CADASTRAR, "da Sess\u00E3o");
+		return pList;
 	}
 
-	return linkedList_put(sessao_nova(peca, dataHora), list);
+	int vNovoId = linkedListCount(pList) + 1;
+	Sessao vResult = sessaoNew(vNovoId, pPeca, vDateTime);
+
+	return linkedListPut(&vResult, pList);
 }

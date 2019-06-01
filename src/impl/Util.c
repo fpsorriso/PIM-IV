@@ -13,7 +13,7 @@
  * Nao valida caracter de final de texto.
  */
 int char_IsCaracterControle(char pCaracter) {
-	switch (caracter) {
+	switch (pCaracter) {
 	case '\n':
 	case '\t':
 	case '\r':
@@ -40,30 +40,36 @@ void strCopy(char* pSource, char* pDestine) {
 /**
  * Copia uma perte da String
  */
-char* strSubstr(char* str, int indexInicial, int quantidadeCaracteres) {
-	int sizeStrOriginal = strlen(str);
-	int quantidadeCaracteresCopiar = quantidadeCaracteres > sizeStrOriginal ? sizeStrOriginal : quantidadeCaracteres;
-	char* result = (char*) calloc(quantidadeCaracteresCopiar == 0 ? 1 : quantidadeCaracteresCopiar, sizeof(char));
+char* strSubstr(char* pStr, int pIndexInicial, int pQuantidadeCaracteres) {
+	int vSizeStrOriginal = strlen(pStr);
+	int vQuantidadeCaracteresCopiar =
+			pQuantidadeCaracteres > vSizeStrOriginal ?
+					vSizeStrOriginal : pQuantidadeCaracteres;
 
-	if (str != NULL && strlen(str) > 0 && quantidadeCaracteres > 0 && indexInicial > -1) {
-		for (int i = 0; i < quantidadeCaracteresCopiar; i++) {
-			result[i] = str[i + indexInicial];
+	char* vResult = (char*) calloc(
+			vQuantidadeCaracteresCopiar == 0 ? 1 : vQuantidadeCaracteresCopiar,
+			sizeof(char));
+
+	if (pStr != NULL && strlen(pStr) > 0 && pQuantidadeCaracteres > 0
+			&& pIndexInicial > -1) {
+		for (int i = 0; i < vQuantidadeCaracteresCopiar; i++) {
+			vResult[i] = pStr[i + pIndexInicial];
 		}
 	}
 
-	return result;
+	return vResult;
 }
 
 /**
  * Remove os espaços em branco do lado direito
  */
-char* strRTrim(char* str) {
-	if (str != NULL && strlen(str) > 0) {
-		int strSizeOriginal = strlen(str);
+char* strRTrim(char* pStr) {
+	if (pStr != NULL && strlen(pStr) > 0) {
+		int strSizeOriginal = strlen(pStr);
 		int i = strSizeOriginal;
 
 		while (i > -1) {
-			if (char_IsCaracterControle(str[i - 1])) {
+			if (char_IsCaracterControle(pStr[i - 1])) {
 				i--;
 				continue;
 			}
@@ -72,23 +78,23 @@ char* strRTrim(char* str) {
 		}
 
 		if (i < strSizeOriginal) {
-			return strSubstr(str, 0, i);
+			return strSubstr(pStr, 0, i);
 		}
 	}
 
-	return str;
+	return pStr;
 }
 
 /**
  * Remove os espaços em branco do lado esquedo
  */
-char* strLTrim(char* str) {
-	if (str != NULL && strlen(str) > 0) {
-		int strSizeOriginal = strlen(str);
+char* strLTrim(char* pStr) {
+	if (pStr != NULL && strlen(pStr) > 0) {
+		int strSizeOriginal = strlen(pStr);
 		int i = 0;
 
-		while (str[i] != '\0') {
-			if (char_IsCaracterControle(str[i])) {
+		while (pStr[i] != '\0') {
+			if (char_IsCaracterControle(pStr[i])) {
 				i++;
 				continue;
 			}
@@ -97,38 +103,38 @@ char* strLTrim(char* str) {
 		}
 
 		if (i > 0) {
-			return strSubstr(str, i, strSizeOriginal - i);
+			return strSubstr(pStr, i, strSizeOriginal - i);
 		}
 	}
 
-	return str;
+	return pStr;
 
 }
 
 /**
  * Remove os espaços em branco de ambos os lados
  */
-char* strTrim(char* str) {
-	if (str != NULL && strlen(str) > 0) {
-		char* l = strLTrim(str);
+char* strTrim(char* pStr) {
+	if (pStr != NULL && strlen(pStr) > 0) {
+		char* l = strLTrim(pStr);
 		char* result = strRTrim(l);
 
-		if (l != NULL && l != str) {
+		if (l != NULL && l != pStr) {
 			free(l);
 		}
 
 		return result;
 	}
 
-	return str;
+	return pStr;
 }
 
 /**
  * Verifica se uma String esta vazia.
  */
-int strIsEmpty(char* str) {
-	if (str != NULL) {
-		char* t = strTrim(str);
+int strIsEmpty(char* pStr) {
+	if (pStr != NULL) {
+		char* t = strTrim(pStr);
 		int result = strlen(t) == 0;
 
 		return result;

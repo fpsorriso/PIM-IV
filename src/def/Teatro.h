@@ -12,11 +12,9 @@ typedef struct {
 	int capacidade;
 } Teatro;
 
-Teatro teatroVazio();
+Teatro teatroEmpty();
 
-int teatroIsNull(Teatro pTeatro);
-
-Teatro teatroNovo(int capacidade);
+Teatro teatroNew(int capacidade);
 
 int teatroGetCapacidade(Teatro pTeatro);
 

@@ -13,21 +13,13 @@
 
 #include "../def/Constante.h"
 
-Teatro teatroVazio() {
+Teatro teatroEmpty() {
 	Teatro vTeatroVazio;
 	vTeatroVazio.capacidade = 0;
 	return vTeatroVazio;
 }
 
-int teatroIsNull(Teatro pTeatro) {
-	if (&pTeatro == NULL) {
-		return 1;
-	}
-
-	return 0;
-}
-
-Teatro teatroNovo(int id, int capacidade) {
+Teatro teatroNew(int capacidade) {
 	Teatro vTeatro;
 	vTeatro.capacidade = capacidade;
 
@@ -35,21 +27,15 @@ Teatro teatroNovo(int id, int capacidade) {
 }
 
 int teatroGetCapacidade(Teatro pTeatro) {
-	if (!teatroIsNull(pTeatro)) {
-		return (int) pTeatro->capacidade;
-	}
-
-	return 0;
+	return pTeatro.capacidade;
 }
 
 void teatroSetCapacidade(Teatro pTeatro, int capacidade) {
-	if (!teatroIsNull(pTeatro)) {
-		pTeatro->capacidade = capacidade;
-	}
+	pTeatro.capacidade = capacidade;
 }
 
 void teatroPrint(Teatro pTeatro) {
-	printf("\n[Teatro] %d", teatro_getId(pTeatro));
+	printf("\n[Teatro] Total de acentos: %d", teatroGetCapacidade(pTeatro));
 }
 
 Teatro teatroCadastra() {
@@ -73,8 +59,8 @@ Teatro teatroCadastra() {
 
 	if (vCapacidade == 0) {
 		printf(_EXCEPTION_IMPOSSIVEL_CADASTRAR, "do Teatro");
-		return teatroVazio();
+		return teatroEmpty();
 	}
 
-	return teatroNovo(vCapacidade);
+	return teatroNew(vCapacidade);
 }

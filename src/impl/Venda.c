@@ -13,138 +13,150 @@
 #include <time.h>
 
 #include "../def/Constante.h"
+#include "../def/Ingresso.h"
 
-int venda_isNull(Venda *venda) {
-	if (venda == NULL) {
+int vendaIsNull(Venda pVenda) {
+	if (&pVenda == NULL) {
 		return 1;
 	}
 
 	return 0;
 }
 
-int venda_getId(Venda *venda) {
-	if (!venda_isNull(venda)) {
-		return venda->id;
+int vendaGetId(Venda pVenda) {
+	if (!vendaIsNull(pVenda)) {
+		return pVenda.id;
 	}
 
 	return 0;
 }
 
-Venda* venda_getVenda(Venda *venda) {
-	if (!venda_isNull(venda)) {
-		return &venda->sessao;
-	}
+Venda vendaNew(int pId, Sessao *pSessao) {
+	Venda vVenda;
 
-	return NULL;
+	vVenda.id = pId;
+	vVenda.dataCriacao = time(NULL);
+	vVenda.sessao = pSessao;
+
+	return vVenda;
 }
 
-void venda_setSessao(Venda *venda, Sessao *sessao) {
-	if (!venda_isNull(venda)) {
-		venda->sessao = sessao;
+int isIdoso(int pIdade) {
+	return pIdade >= _IDADE_IDOSO;
+}
+
+int isCrianca(int pIdade) {
+	return pIdade >= _IDADE_CRIANCA_MINIMO && pIdade <= _IDADE_CRIANCA_MAXIMO;
+}
+
+int buscarPoltronaLivre(LinkedList* pListVenda, Sessao pSessao) {
+	int vVendas = linkedListCount(pListVenda);
+
+
+	if ( vVendas > 0) {
+//		linkedListForeach(pListVenda, );
 	}
 }
 
 
-Venda* venda_novo(int id, Sessao *sessao) {
-	Venda *venda = (Venda *) calloc(1, sizeof(Venda));
 
-	if (venda == NULL) {
-		error(0, _ERROR_CODE_MEMORIA_INSUFICIENTE, _ERROR_CODE_MEMORIA_INSUFICIENTE);
-		return NULL;
-	}
-
-	venda->id = id;
-	venda->dataCriacao = time(NULL);
-	venda->sessao = sessao;
-
-	return venda;
-}
-
-LinkedList* venda_adicionarIngresso(Venda* venda) {
-	if (!venda_isNull(venda)) {
-		int idade = 0;
-		int professorRedePublica = 0;
-		int alunoRedePublica = 0;
-		int novoIdIngresso = linkedList_count(venda->ingressos) + 1;
-		int poltrona = 0;
-		char opcao = '\0';
+LinkedList* vendaAdicionarIngresso(Venda pVenda, int pPoltrona) {
+	if (!vendaIsNull(pVenda)) {
+		int vIdade = 0;
+		int pProfessorRedePublica = 0;
+		int pAlunoRedePublica = 0;
+		char vOpcao = '\0';
 
 		do {
-			opcao = '\0';
+			vOpcao = '\0';
 			printf("\nInforme a idade do espectador: ");
-			scanf("%d", &idade);
+			scanf("%d", &vIdade);
 
-			if (idade == 0) {
+			if (vIdade == 0) {
 				printf(_EXCEPTION_CAMPO_OBRIGATORIO, "Idade do espectador");
 				printf(_MENSAGEM_INFORMAR_NOVAMENTE);
-				scanf("%s", &opcao);
+				scanf("%s", &vOpcao);
 			}
 
-		} while (opcao == 's');
+		} while (vOpcao == 's');
 
 		printf("\n\u00E9 professor da rede publica (s/n)?");
-		scanf("%s", &opcao);
-		professorRedePublica = opcao == 's';
+		scanf("%s", &vOpcao);
+		pProfessorRedePublica = vOpcao == 's' ? 1 : 0;
 
 		printf("\n\u00E9 aluno da rede publica (s/n)?");
-		scanf("%s", &opcao);
-		alunoRedePublica = opcao == 's';
+		scanf("%s", &vOpcao);
+		pAlunoRedePublica = vOpcao == 's'? 1 : 0;
 
-		Ingresso* ingresso = ingresso_novo(novoIdIngresso, venda, poltrona, idade >= _IDADE_IDOSO,
-				idade >= _IDADE_CRIANCA_MINIMO && idade <= _IDADE_CRIANCA_MAXIMO, professorRedePublica, alunoRedePublica);
+//		Ingresso vIngresso = ingressoNew(pVenda, pPoltrona, isIdoso(vIdade),
+//				isCrianca(vIdade), pProfessorRedePublica, pAlunoRedePublica);
 
-		return linkedList_put(ingresso, venda->ingressos);
+		Ingresso* vIngressoPoint = (Ingresso*) calloc(1, sizeof(Ingresso));
+
+
+		return linkedListPut(vIngressoPoint, pVenda.ingressos);
 	}
 
-	return NULL;
+	return NULL ;
 }
 
-LinkedList* venda_cadastra(LinkedList* listVenda, LinkedList* listSessao) {
-	Sessao* sessao = NULL;
-	Venda* venda = NULL;
-	int idSessao = 0;
-	int novoIdVenda = linkedList_count(listVenda) + 1;
-	char opcao = '\0';
+LinkedList* vendaCadastra(LinkedList* listVenda, LinkedList* listSessao) {
+	int novoIdVenda = linkedListCount(listVenda) + 1;
+	Sessao* vSessao;
+	int vIdSessao;
+	char vOpcao = '\0';
 
 	if (listSessao == NULL) {
-		fprintf(stderr, _EXCEPTION_NULL_POINT, "A sess\u00E3o");
+		printf(_EXCEPTION_NULL_POINT, "A sess\u00E3o");
 		return listVenda;
 	}
 
 	do {
-		sessao = NULL;
-		idSessao = 0;
-		opcao = '\0';
+		vSessao = NULL;
+		vIdSessao = 0;
+		vOpcao = '\0';
 
 		printf("Informe o c\u00F3digo da Sess\u00E3o:\n");
-		scanf("%d", &idSessao);
+		scanf("%d", &vIdSessao);
 
-		if (idSessao == 0) {
-			linkedList_foreach(listSessao, sessao_simplePrint);
+		if (vIdSessao == 0) {
+			linkedListForeach(listSessao, sessaoPrint);
+
 		} else {
-			Sessao* sessao = sessao_busca(listSessao, idSessao);
-			if (sessao_isNull(sessao)) {
-				printf("N\u00E3o foi poss\u00EDvel encontrar a Sess\u00E3o com id %d. %s", idSessao, _MENSAGEM_INFORMAR_NOVAMENTE);
-				scanf("%s", &opcao);
-				idSessao = 0;
+			vSessao = sessaoFind(listSessao, vIdSessao);
+
+			if (vSessao == NULL) {
+				printf(
+						"N\u00E3o foi poss\u00EDvel encontrar a Sess\u00E3o com id %d. %s",
+						vIdSessao, _MENSAGEM_INFORMAR_NOVAMENTE);
+				scanf("%s", &vOpcao);
+				vIdSessao = 0;
 			}
 		}
 
-	} while (idSessao == 0 && strcasecmp(opcao, 's'));
+	} while (vIdSessao == 0 && strcasecmp(vOpcao, 's') == 0);
 
-	venda = venda_novo(novoIdVenda, sessao);
+	Venda vVenda = vendaNew(novoIdVenda, vSessao);
 
 	do {
-		opcao = '\0';
-		venda->ingressos =venda_adicionarIngresso(venda);
-		printf("\nAdicionar outro ingresso (s/n)?");
-		scanf("%s", &opcao);
-	} while (strcasecmp(opcao, 's'));
+		vOpcao = '\0';
+		int vPoltronaLivre = buscarPoltronaLivre(listVenda, vSessao);
 
-	if (linkedList_count(venda->ingressos) == 0) {
-		error(0, 10000, "Nenhuma venda de ingresso foi realizada, a venda atual ser\u00E1 cancelada.");
+		if (vPoltronaLivre > 0) {
+		vVenda.ingressos = vendaAdicionarIngresso(vVenda, vPoltronaLivre);
+		printf("\nAdicionar outro ingresso (s/n)?");
+		scanf("%s", &vOpcao);
+		} else {
+			printf("Sess\u00E3o de %s, esta esgotada.", sessaoGetDataHoraStr(vSessao->dataHora));
+			break;
+		}
+
+	} while (strcasecmp(vOpcao, 's') == 0);
+
+	if (linkedListCount(vVenda.ingressos) == 0) {
+		printf("%s","Nenhuma venda de ingresso foi realizada, a venda atual ser\u00E1 cancelada.");
 		return listVenda;
 	}
 
-	return linkedList_put(venda, listVenda);
+	return linkedListPut(&vVenda, listVenda);
 }

@@ -5,7 +5,6 @@
  *      Author: sorriso
  */
 
-
 #include "../def/Ingresso.h"
 
 #include <stdio.h>
@@ -13,104 +12,106 @@
 
 #include "../def/Constante.h"
 #include "../def/LinkedList.h"
-#include "../def/Sessao.h"
+#include "../def/Peca.h"
 
-int ingresso_isNull(Ingresso *ingresso) {
-	if (ingresso == NULL) {
+Ingresso ingressoEmpty() {
+	Ingresso vIngresso;
+	vIngresso.alunoRedePublica = 0;
+	vIngresso.crianca2A12 = 0;
+	vIngresso.desconto = 0.00;
+	vIngresso.idoso = 0;
+	vIngresso.poltrona = 0;
+	vIngresso.professorRedePublica = 0;
+	vIngresso.valorUnitario = 0.00;
+	vIngresso.venda = NULL;
+
+	return vIngresso;
+}
+
+int ingressoIsNull(Ingresso pIngresso) {
+	if (&pIngresso == NULL) {
 		return 1;
 	}
 
 	return 0;
 }
 
-int ingresso_isMeiaEntrada(Ingresso* ingresso) {
-	if (!ingresso_isNull(ingresso)) {
-		return ingresso->idoso || ingresso->crianca2A12 || ingresso->professorRedePublica;
+int ingressoIsMeiaEntrada(Ingresso pIngresso) {
+	if (!ingressoIsNull(pIngresso)) {
+		return pIngresso.idoso || pIngresso.crianca2A12
+				|| pIngresso.professorRedePublica;
 	}
 
 	return 0;
 }
 
-int ingresso_gratis(Ingresso* ingresso) {
-	if (!ingresso_isNull(ingresso)) {
-		return sessao_isTercaFeira(&ingresso->venda) && ingresso->alunoRedePublica;
+int ingressoGratis(Ingresso pIngresso) {
+	if (!ingressoIsNull(pIngresso)) {
+		return sessaoIsTercaFeira(pIngresso.venda) && pIngresso.alunoRedePublica;
 	}
 
 	return 0;
 }
 
-double ingresso_calculaDesconto(Ingresso *ingresso) {
-	if (ingresso_isMeiaEntrada(ingresso)) {
-		return ingresso->valorUnitario / 2;
+double ingressoCalculaDesconto(Ingresso pIngresso) {
+	if (ingressoIsMeiaEntrada(pIngresso)) {
+		return pIngresso.valorUnitario / 2;
 
-	} else if (ingresso_gratis(ingresso)) {
-		return ingresso->valorUnitario;
+	} else if (ingressoGratis(pIngresso)) {
+		return pIngresso.valorUnitario;
 	}
 
 	return 0;
 }
 
-int ingresso_getId(Ingresso* ingresso) {
-	if (!ingresso_isNull(ingresso)) {
-		return ingresso->id;
+Venda* ingressoGetVenda(Ingresso pIngresso) {
+	if (!ingressoIsNull(pIngresso)) {
+		return pIngresso.venda;
+	}
+
+	return NULL ;
+}
+
+int ingressoGetPoltrona(Ingresso pIngresso) {
+	if (!ingressoIsNull(pIngresso)) {
+		return pIngresso.poltrona;
 	}
 
 	return 0;
 }
 
-Venda* ingresso_getVenda(Ingresso* ingresso) {
-	if (!ingresso_isNull(ingresso)) {
-		return ingresso->venda;
-	}
-
-	return NULL;
-}
-
-int ingresso_getPoltrona(Ingresso* ingresso) {
-	if (!ingresso_isNull(ingresso)) {
-		return ingresso->poltrona;
-	}
-
-	return 0;
-}
-
-double ingresso_getValorUnitario(Ingresso* ingresso) {
-	if (!ingresso_isNull(ingresso)) {
-		return ingresso->valorUnitario;
+double ingressoGetValorUnitario(Ingresso pIngresso) {
+	if (!ingressoIsNull(pIngresso)) {
+		return pIngresso.valorUnitario;
 	}
 
 	return 0.00;
 }
 
-double ingresso_getValorDesconto(Ingresso* ingresso) {
-	if (!ingresso_isNull(ingresso)) {
-		return ingresso->desconto;
+double ingressoGetValorDesconto(Ingresso pIngresso) {
+	if (!ingressoIsNull(pIngresso)) {
+		return pIngresso.desconto;
 	}
 
 	return 0.00;
 }
 
-Ingresso* ingresso_novo(int id, Venda* venda, int poltrona, int idoso, int crianca2a12, int professorRedePublica, int alunoRedePublica) {
-	if (!venda_isNull(venda)) {
-		Ingresso *ingresso = (Ingresso *) calloc(1, sizeof(Ingresso));
+Ingresso ingressoNew(Venda pVenda, int pPoltrona, int pIdoso, int pCrianca2a12,
+		int pProfessorRedePublica, int pAlunoRedePublica) {
+	Ingresso vIngresso = ingressoEmpty();
 
-		if (ingresso == NULL) {
-			printf(_EXCEPTION_MEMORIA_INSUFICIENTE);
-			return NULL;
-		}
-
-		ingresso->id = id;
-		ingresso->venda = venda;
-		ingresso->poltrona = poltrona;
-		ingresso->valorUnitario = sessao_getValorIngresso(venda->sessao);
-		ingresso->idoso = idoso;
-		ingresso->crianca2A12 = crianca2a12;
-		ingresso->professorRedePublica = professorRedePublica;
-		ingresso->alunoRedePublica = alunoRedePublica;
-		ingresso->desconto = ingresso_calculaDesconto(ingresso);
-		return ingresso;
+	if (!vendaIsNull(pVenda)) {
+		vIngresso.venda = &pVenda;
+		vIngresso.poltrona = pPoltrona;
+		vIngresso.valorUnitario = pecaGetValorIngresso(pVenda->sessao->peca);
+		vIngresso.idoso = pIdoso;
+		vIngresso.crianca2A12 = pCrianca2a12;
+		vIngresso.professorRedePublica = pProfessorRedePublica;
+		vIngresso.alunoRedePublica = pAlunoRedePublica;
+		vIngresso.desconto = ingressoCalculaDesconto(vIngresso);
+		return vIngresso;
 	}
 
-	return NULL;
+	return vIngresso;
 }
 

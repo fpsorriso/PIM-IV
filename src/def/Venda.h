@@ -8,26 +8,25 @@
 #ifndef SRC_VENDA_H_
 #define SRC_VENDA_H_
 
-#include "../def/LinkedList.h"
-#include "../def/Sessao.h"
+#include "LinkedList.h"
+#include "Sessao.h"
 
-struct venda {
+typedef struct {
 	int id;
 	time_t dataCriacao;
 	Sessao* sessao;
 	LinkedList* ingressos;
-};
+} Venda;
 
-typedef struct venda Venda;
 
-int venda_isNull(Venda *venda);
+int vendaIsNull(Venda pVenda);
 
-Venda* venda_novo(int id, Sessao *sessao);
+Venda vendaNew(int id, Sessao *sessao);
 
-int venda_getId(Venda *venda);
+int vendaGetId(Venda pVenda);
 
-Sessao* venda_getSessao(Venda *venda);
+Sessao vendaGetSessao(Venda pVenda);
 
-LinkedList* venda_cadastra(LinkedList* list, LinkedList* listSessao);
+LinkedList* vendaCadastra(LinkedList* list, LinkedList* listSessao);
 
 #endif /* SRC_VENDA_H_ */

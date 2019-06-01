@@ -10,25 +10,26 @@
 #include <stdio.h>
 #include "../def/Constante.h"
 
-Node* linkedList_put(void* value, Node* next) {
+Node* linkedListPut(void* pValue, Node* pNext) {
 	Node* new_node = (Node*) malloc(sizeof(Node));
 
 	if (new_node == NULL) {
-		error(0,_ERROR_CODE_MEMORIA_INSUFICIENTE, _EXCEPTION_MEMORIA_INSUFICIENTE);
-		return NULL;
+		printf("%d - %s", _ERROR_CODE_MEMORIA_INSUFICIENTE,
+		_EXCEPTION_MEMORIA_INSUFICIENTE);
+		return NULL ;
 	}
 
-	new_node->value = value;
-	new_node->next = next;
+	new_node->value = pValue;
+	new_node->next = pNext;
 
 	return new_node;
 }
 
-int linkedList_count(Node *head) {
-	Node *cursor = head;
+int linkedListCount(Node *pHead) {
+	Node *cursor = pHead;
 	int c = 0;
 
-	while (cursor != NULL) {
+	while (cursor != NULL ) {
 		c++;
 		cursor = cursor->next;
 	}
@@ -36,71 +37,82 @@ int linkedList_count(Node *head) {
 	return c;
 }
 
-Node* linkedList_search(Node* head, void* value, comparable compareFunction) {
+Node* linkedListSearch(Node* pHead, void* pValue, comparable pCompareFunction) {
 
-	if (head != NULL) {
-		if (compareFunction(head->value, value)) {
-			return head;
+	if (pHead != NULL) {
+		if (pCompareFunction(pHead->value, pValue) == 0) {
+			return pHead;
 		}
 
-		return linkedList_search(head->next, value, compareFunction);
+		return linkedListSearch(pHead->next, pValue, pCompareFunction);
 	}
 
-	return NULL;
+	return NULL ;
 }
 
-Node* linkedList_removeFront(Node* head) {
-	if (head == NULL)
-		return NULL;
-	Node *front = head;
-	head = head->next;
+Node* linkedListRemoveFront(Node* pHead) {
+	if (pHead == NULL) {
+		return NULL ;
+	}
+
+	Node *front = pHead;
+	pHead = pHead->next;
 	front->next = NULL;
+
 	/* is this the last node in the list */
-	if (front == head)
-		head = NULL;
+	if (front == pHead) {
+		pHead = NULL;
+	}
+
 	free(front);
-	return head;
+	return pHead;
 }
 
-Node* linkedList_removeBack(Node* head) {
-	if (head == NULL)
-		return NULL;
+Node* linkedListRemoveBack(Node* pHead) {
+	if (pHead == NULL) {
+		return NULL ;
+	}
 
-	Node *cursor = head;
+	Node *cursor = pHead;
 	Node *back = NULL;
-	while (cursor->next != NULL) {
+
+	while (cursor->next != NULL ) {
 		back = cursor;
 		cursor = cursor->next;
 	}
-	if (back != NULL)
+
+	if (back != NULL) {
 		back->next = NULL;
+	}
 
 	/* if this is the last node in the list*/
-	if (cursor == head)
-		head = NULL;
+	if (cursor == pHead) {
+		pHead = NULL;
+	}
 
 	free(cursor);
 
-	return head;
+	return pHead;
 }
 
-Node* linkedList_remove(LinkedList* head, Node* node) {
+Node* linkedListRemove(LinkedList* pHead, Node* pNode) {
 	/* if the node is the first node */
-	if (node == head) {
-		head = linkedList_removeFront(head);
-		return head;
+	if (pNode == pHead) {
+		pHead = linkedListRemoveFront(pHead);
+		return pHead;
 	}
 
 	/* if the node is the last node */
-	if (node->next == NULL) {
-		head = linkedList_removeBack(head);
-		return head;
+	if (pNode->next == NULL) {
+		pHead = linkedListRemoveBack(pHead);
+		return pHead;
 	}
 
 	/* if the node is in the middle */
-	Node* cursor = head;
-	while (cursor != NULL) {
-		if (cursor->next == node) {
+	Node* cursor = pHead;
+
+	while (cursor != NULL ) {
+		if (cursor->next == pNode) {
 			break;
 		}
 
@@ -114,17 +126,17 @@ Node* linkedList_remove(LinkedList* head, Node* node) {
 		free(tmp);
 	}
 
-	return head;
+	return pHead;
 }
 
-void linkedList_dispose(LinkedList *head) {
+void linkedListDispose(LinkedList* pHead) {
 	Node *cursor, *tmp;
 
-	if (head != NULL) {
-		cursor = head->next;
-		head->next = NULL;
+	if (pHead != NULL) {
+		cursor = pHead->next;
+		pHead->next = NULL;
 
-		while (cursor != NULL) {
+		while (cursor != NULL ) {
 			tmp = cursor->next;
 			free(cursor);
 			cursor = tmp;
@@ -132,9 +144,9 @@ void linkedList_dispose(LinkedList *head) {
 	}
 }
 
-void linkedList_foreach(LinkedList* head, callback function) {
+void linkedListForeach(LinkedList* head, callback function) {
 	if (head != NULL) {
 		function(head->value);
-		linkedList_foreach(head->next, function);
+		linkedListForeach(head->next, function);
 	}
 }

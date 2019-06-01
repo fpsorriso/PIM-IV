@@ -17,11 +17,9 @@ typedef struct {
 	double valorIngresso;
 } Peca;
 
-Peca pecaVazia();
+Peca pecaEmpty();
 
-int pecaIsNull(Peca peca);
-
-Peca pecaNova(Teatro pTeatro, char* pTitulo, double pValorIngresso);
+Peca pecaNew(Teatro pTeatro, char* pTitulo, double pValorIngresso);
 
 Teatro pecaGetTeatro(Peca peca);
 

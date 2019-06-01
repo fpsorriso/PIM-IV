@@ -10,20 +10,11 @@
 #include "def/Menu.h"
 
 int main() {
-//	LinkedList* listaSessao = NULL;
-//	LinkedList* listaVenda = NULL;
-//	Teatro* teatro = NULL;
-//	Peca* peca = NULL;
-//
-//	teatro = teatro_cadastra(teatro);
-//	peca = peca_cadastro(peca);
-//	listaSessao = sessao_cadastra(listaSessao, teatro, peca);
-//	listaVenda = venda_cadastra(listaVenda, listaSessao);
-//
-//	linkedList_dispose(listaSessao);
-//	linkedList_dispose(listaVenda);
-//	free(teatro);
-//	free(peca);
+	LinkedList* listaSessao = NULL;
+	LinkedList* listaVenda = NULL;
+	Teatro teatro = teatroEmpty();
+	Peca peca = pecaEmpty();
+
 	exibeMenuPrincipal();
 	printf("\nSistema encerrado.");
 	return(0);

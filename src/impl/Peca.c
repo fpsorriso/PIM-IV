@@ -13,24 +13,16 @@
 #include "../def/Util.h"
 #include "../def/Constante.h"
 
-int pecaIsNull(Peca pPeca) {
-	if (&pPeca == NULL) {
-		return 1;
-	}
-
-	return 0;
-}
-
-Peca pecaVazia() {
+Peca pecaEmpty() {
 	Peca vPecaVazia;
-	vPecaVazia.teatro = teatroVazio();
+	vPecaVazia.teatro = teatroEmpty();
 	vPecaVazia.titulo = "\0";
 	vPecaVazia.valorIngresso = 0.00;
 
 	return vPecaVazia;
 }
 
-Peca pecaNova(Teatro pTeatro, char* pTitulo, double pValorIngresso) {
+Peca pecaNew(Teatro pTeatro, char* pTitulo, double pValorIngresso) {
 	Peca vPeca;
 
 	vPeca.teatro = pTeatro;
@@ -41,43 +33,29 @@ Peca pecaNova(Teatro pTeatro, char* pTitulo, double pValorIngresso) {
 }
 
 Teatro pecaGetTeatro(Peca pPeca) {
-	if (!pecaIsNull(pPeca)) {
-		return pPeca.teatro;
-	}
+	return pPeca.teatro;
 
-	return teatroVazio();
 }
 
 char* pecaGetTitulo(Peca pPeca) {
-	if (!pecaIsNull(pPeca)) {
-		return pPeca.titulo;
-	}
 
-	return calloc(1, sizeof(char));
+	return pPeca.titulo;
 }
 
 void pecaSetTitulo(Peca pPeca, char* pTitulo) {
-	if (!pecaIsNull(pPeca)) {
-		strCopy(pTitulo, pPeca.titulo);
-	}
+	strCopy(pTitulo, pPeca.titulo);
 }
-
+exibeMenuPrincipal
 double pecaGetValorIngresso(Peca pPeca) {
-	if (!pecaIsNull(pPeca)) {
-		return pPeca.valorIngresso;
-	}
-
-	return 0.00;
+	return pPeca.valorIngresso;
 }
 
 void pecaSetValorIngresso(Peca pPeca, double pValorIngresso) {
-	if (!pPeca_isNull(pPeca)) {
-		pPeca.valorIngresso = pValorIngresso;
-	}
+	pPeca.valorIngresso = pValorIngresso;
 }
 
 void pecaPrint(Peca pPeca) {
-	printf("\n[Peca] %d - %s", peca_getId(pPeca), pecaGetTitulo(pPeca));
+	printf("\n[Peca] %s", pecaGetTitulo(pPeca));
 }
 
 double informarValorIngresso() {
@@ -122,22 +100,16 @@ char* informarTitulo() {
 }
 
 Peca pecaCadastro(Teatro pTeatro) {
-	if (!teatroIsNull(pTeatro)) {
+	char* vTitulo;
+	double vValorIngresso = 0.00;
 
-		char vTitulo[_SIZE_TITULO] = '\0';
-		double vValorIngresso = 0.00;
+	vValorIngresso = informarValorIngresso();
+	vTitulo = informarTitulo();
 
-		vValorIngresso = informarValorIngresso();
-        vTitulo = informarTitulo();
-
-		if (strlen(vTitulo) == 0 || vValorIngresso == 0) {
-			printf(_EXCEPTION_IMPOSSIVEL_CADASTRAR, "da Pe\u00E7a");
-			return pecaVazia();
-		}
-
-		return pecaNova(pTeatro, vTitulo, vValorIngresso);
-	} else {
-		printf(_EXCEPTION_NULL_POINT, "Teatro");
-		return pecaVazia();
+	if (strlen(vTitulo) == 0 || vValorIngresso == 0) {
+		printf(_EXCEPTION_IMPOSSIVEL_CADASTRAR, "da Pe\u00E7a");
+		return pecaEmpty();
 	}
+
+	return pecaNew(pTeatro, vTitulo, vValorIngresso);
 }
